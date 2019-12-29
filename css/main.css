@@ -665,7 +665,7 @@ th {
   padding: 120px 0; }
   @media (max-width: 991px) {
     .section-gap {
-      padding: 60px 0; } }
+      padding: 60px 0 240px 0; } }
 
 .section-gap-top {
   padding-top: 120px; }
@@ -1781,23 +1781,19 @@ h1, h2, h3, h4, h5, h6 {
 .logo {
   text-align: center; }
   .logo img {
-    width: 27%; }
+    width: 50%; }
     @media (max-width: 767px) {
       .logo img {
-        width: 16%; } }
+        width: 65%; } }
     @media (max-width: 576px) {
       .logo img {
-        width: 24%; } }
+        width: 65%; } }
     @media (max-width: 480px) {
       .logo img {
-        width: 35%; } }
+        width: 65%; } }
     @media (max-width: 320px) {
       .logo img {
         width: 75%; } }
-  @media (max-width: 767px) {
-    .logo {
-      position: absolute;
-      top: 9px; } }
 
 .header-area {
   padding: 10px 0;
@@ -3022,3 +3018,11 @@ h1, h2, h3, h4, h5, h6 {
 /*-------- end footer Area -------------*/
 
 /*# sourceMappingURL=main.css.map */
+
+/* justin custom css
+.header-wrap {
+  max-width: 100%;
+  max-height: 100vh;
+  margin: auto;
+}
+*/
