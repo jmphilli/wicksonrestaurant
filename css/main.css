@@ -1808,6 +1808,10 @@ h1, h2, h3, h4, h5, h6 {
   @media (max-width: 767px) {
     .header-area {
       position: absolute; } }
+  @media (max-width: 500px) {
+    .header-area {
+      padding: 0;
+      position: relative; } }
 
 .header-fixed {
   position: fixed;
@@ -1861,9 +1865,6 @@ h1, h2, h3, h4, h5, h6 {
       color: #ad9966; }
     .menu-left a:last-child {
       margin-right: 0; }
-  @media (max-width: 767px) {
-    .menu-left {
-      display: none; } }
 
 .menu-right li a {
   margin-right: 32px;
