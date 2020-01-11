@@ -4,3 +4,4 @@ scp -i ~/wickson/id_rsa -r ${WICKSON_SRC_DIR}/fonts ${REMOTE_USER}@${REMOTE_HOST
 scp -i ~/wickson/id_rsa -r ${WICKSON_SRC_DIR}/img ${REMOTE_USER}@${REMOTE_HOST}:/var/www/wicksonrestaurant-staging.com/
 scp -i ~/wickson/id_rsa -r ${WICKSON_SRC_DIR}/js ${REMOTE_USER}@${REMOTE_HOST}:/var/www/wicksonrestaurant-staging.com/
 scp -i ~/wickson/id_rsa -r ${WICKSON_SRC_DIR}/*.html ${REMOTE_USER}@${REMOTE_HOST}:/var/www/wicksonrestaurant-staging.com/
+scp -i ~/wickson/id_rsa -r ${WICKSON_SRC_DIR}/go-live.sh ${REMOTE_USER}@${REMOTE_HOST}:/var/www/wicksonrestaurant-staging.com/
