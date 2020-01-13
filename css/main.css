@@ -3058,3 +3058,31 @@ h1, h2, h3, h4, h5, h6 {
 .menu-contents p {
   font-size: 18px;
 }
+
+.about-page {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  width: 43em;
+  font-family: 'EB Garamond', serif;
+}
+@media (max-width: 500px) {
+      .about-page {
+        width: 34em; } }
+@media (max-width: 400px) {
+      .about-page {
+        width: 23em; } }
+
+.about-page h2 {
+  font-size: 25px;
+  padding: 35px;
+}
+
+.about-page p {
+  font-size: 18px;
+}
+
+.about-quote {
+  font-style: italic;
+  color: lightslategray;
+}
