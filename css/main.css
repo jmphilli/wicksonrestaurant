@@ -1846,11 +1846,22 @@ h1, h2, h3, h4, h5, h6 {
   text-decoration: none;
   background-color: transparent; }
 
+
+@font-face {
+	font-family: 'lintsec';
+	src:url('../fonts/lintsec.ttf');
+	font-weight: normal;
+	font-style: normal;
+}
+
 .menu-left {
-  text-align: center; }
+  text-align: center;
+  font-family: 'lintsec', sans-serif;
+}
   .menu-left a {
     margin-right: 32px;
     color: #000;
+    font-family: 'lintsec', sans-serif;
     letter-spacing: 2px;
     text-transform: uppercase;
     font-size: 13px;
@@ -2897,6 +2908,8 @@ h1, h2, h3, h4, h5, h6 {
 /* =================================== */
 /*-------- start footer Area -------------*/
 .footer-area {
+  font-family: 'EB Garamond', serif;
+  font-size: 17px;
   background-color: #04091e; }
 
 .single-footer-widget h4 {
@@ -3021,4 +3034,27 @@ h1, h2, h3, h4, h5, h6 {
 .footer-text {
   padding-top: 5px;
   padding-bottom: 5px;
+}
+
+.footer-text-large {
+  font-size: 25px;
+}
+
+.menu-contents{
+  text-align: center;
+  font-family: 'EB Garamond', serif;
+}
+
+.menu-contents h1 {
+  font-size: 25px;
+  padding: 35px;
+}
+
+.menu-contents h2 {
+  font-size: 20px;
+  padding: 10px;
+}
+
+.menu-contents p {
+  font-size: 18px;
 }
