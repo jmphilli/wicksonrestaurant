@@ -3063,7 +3063,7 @@ h1, h2, h3, h4, h5, h6 {
   text-align: center;
   margin-left: auto;
   margin-right: auto;
-  width: 43em;
+  width: 60em;
   font-family: 'EB Garamond', serif;
 }
 @media (max-width: 500px) {
@@ -3072,6 +3072,10 @@ h1, h2, h3, h4, h5, h6 {
 @media (max-width: 400px) {
       .about-page {
         width: 23em; } }
+
+.about-top {
+  padding-top: 50px;
+}
 
 .about-page h2 {
   font-size: 25px;
@@ -3085,4 +3089,5 @@ h1, h2, h3, h4, h5, h6 {
 .about-quote {
   font-style: italic;
   color: lightslategray;
+  padding-top: 50px;
 }
