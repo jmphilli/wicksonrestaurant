@@ -3066,12 +3066,9 @@ h1, h2, h3, h4, h5, h6 {
   width: 60em;
   font-family: 'EB Garamond', serif;
 }
-@media (max-width: 500px) {
+@media (max-width: 751px) {
       .about-page {
-        width: 34em; } }
-@media (max-width: 400px) {
-      .about-page {
-        width: 23em; } }
+        width: 20em; } }
 
 .about-top {
   padding-top: 50px;
