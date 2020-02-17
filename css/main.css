@@ -1854,21 +1854,43 @@ h1, h2, h3, h4, h5, h6 {
 	font-style: normal;
 }
 
+@font-face {
+	font-family: 'greatlakes';
+	src:url('../fonts/GREALN__.ttf');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'speakeasy';
+	src:url('../fonts/SF_Speakeasy.ttf');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'worksans';
+	src:url('../fonts/WorkSans-Regular.otf');
+	font-weight: normal;
+	font-style: normal;
+}
+
 .menu-left {
   text-align: center;
-  font-family: 'lintsec', sans-serif;
+  font-family: 'speakeasy'
 }
   .menu-left a {
     margin-right: 32px;
     color: #000;
-    font-family: 'lintsec', sans-serif;
-    letter-spacing: 2px;
+    font-family: 'speakeasy', sans-serif;
+    letter-spacing: 4px;
     text-transform: uppercase;
-    font-size: 13px;
+    font-size: 43px;
     font-weight: 500; }
     @media (max-width: 991px) {
       .menu-left a {
-        margin-right: 7px; } }
+        margin-right: 7px;
+        font-size: 26px;} }
     .menu-left a:hover, .menu-left a.active {
       color: #ad9966; }
     .menu-left a:last-child {
