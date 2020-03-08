@@ -3117,3 +3117,9 @@ h1, h2, h3, h4, h5, h6 {
   color: lightslategray;
   padding-top: 50px;
 }
+
+.leaf {}
+  .leaf img {
+    width: 175px;
+    transform: rotate(60deg);
+  }
