@@ -1890,7 +1890,7 @@ h1, h2, h3, h4, h5, h6 {
     @media (max-width: 991px) {
       .menu-left a {
         margin-right: 7px;
-        font-size: 26px;} }
+        font-size: 15px;} }
     .menu-left a:hover, .menu-left a.active {
       color: #ad9966; }
     .menu-left a:last-child {
@@ -2930,8 +2930,9 @@ h1, h2, h3, h4, h5, h6 {
 /* =================================== */
 /*-------- start footer Area -------------*/
 .footer-area {
-  font-family: 'EB Garamond', serif;
+  font-family: "Playfair Display", serif;;
   font-size: 17px;
+  text-align: center;
   background-color: #04091e; }
 
 .single-footer-widget h4 {
