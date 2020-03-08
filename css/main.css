@@ -1887,10 +1887,16 @@ h1, h2, h3, h4, h5, h6 {
     text-transform: uppercase;
     font-size: 43px;
     font-weight: 500; }
-    @media (max-width: 991px) {
+    @media (max-width: 1080px) {
       .menu-left a {
+        line-height: 3.25;
         margin-right: 7px;
-        font-size: 26px;} }
+        font-size: 15px;} }
+    @media (max-width: 375px) {
+      .menu-left a {
+        line-height: 2.5;
+        margin-right: 7px;
+        font-size: 25px;} }
     .menu-left a:hover, .menu-left a.active {
       color: #ad9966; }
     .menu-left a:last-child {
@@ -2930,8 +2936,9 @@ h1, h2, h3, h4, h5, h6 {
 /* =================================== */
 /*-------- start footer Area -------------*/
 .footer-area {
-  font-family: 'EB Garamond', serif;
+  font-family: "Playfair Display", serif;;
   font-size: 17px;
+  text-align: center;
   background-color: #04091e; }
 
 .single-footer-widget h4 {
