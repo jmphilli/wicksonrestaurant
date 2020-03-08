@@ -1889,6 +1889,7 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 500; }
     @media (max-width: 991px) {
       .menu-left a {
+        line-height: 2.5;
         margin-right: 7px;
         font-size: 15px;} }
     .menu-left a:hover, .menu-left a.active {
