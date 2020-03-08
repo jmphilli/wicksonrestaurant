@@ -3123,3 +3123,8 @@ h1, h2, h3, h4, h5, h6 {
     width: 175px;
     transform: rotate(60deg);
   }
+
+.tree {}
+  .tree img {
+    width: 175px;
+}
