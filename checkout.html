@@ -2,6 +2,7 @@
 <html lang="zxx" class="no-js">
 
 <head>
+    <script src="https://checkout.sandbox.dev.clover.com/sdk.js"></script>
 	<!-- Mobile Specific Meta -->
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<!-- Favicon-->
@@ -48,6 +49,36 @@
 	<!--================ End Header Area =================-->
 	<div class="main-content">
          <form action="/charge" method="post" id="payment-form">
+             <div class="form-row top-row">
+                <div id="amount" class="field card-number">
+                  <input name="amount" placeholder="Amount">
+                </div>
+             </div>
+
+             <div class="form-row top-row">
+                 <div id="card-number" class="field card-number"></div>
+                 <div class="input-errors" id="card-number-errors" role="alert"></div>
+             </div>
+
+             <div class="form-row">
+                 <div id="card-date" class="field third-width"></div>
+                 <div class="input-errors" id="card-date-errors" role="alert"></div>
+             </div>
+
+             <div class="form-row">
+                 <div id="card-cvv" class="field third-width"></div>
+                 <div class="input-errors" id="card-cvv-errors" role="alert"></div>
+             </div>
+
+             <div class="form-row">
+                 <div id="card-postal-code" class="field third-width"></div>
+                 <div class="input-errors" id="card-postal-code-errors" role="alert"></div>
+             </div>
+             <div id="card-response" role="alert"></div>
+             <div class="button-container">
+                <button>Submit Payment</button>
+             </div>
+         </form>
 	</div>
 
 	<!--================ Start Footer Area =================-->
@@ -93,7 +124,6 @@
 	<script src="js/jquery.ajaxchimp.min.js"></script>
 	<script src="js/jquery.magnific-popup.min.js"></script>
 	<script src="js/main.js"></script>
-    <script src="https://checkout.sandbox.dev.clover.com/sdk.js"></script>
     <script src="js/clover-integration.js"></script>
 </body>
 
