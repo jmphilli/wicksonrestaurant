@@ -8,7 +8,7 @@ from app.constants import HTTP_200_OK
 from app.constants import HTTP_400_BAD_REQUEST
 from app.core_services.order import default_order_core_service
 
-blueprint = Blueprint("inventory", __name__)
+blueprint = Blueprint("cart", __name__)
 
 
 @blueprint.route("/add-line-item", methods=["POST"])
@@ -24,4 +24,4 @@ def add_line_item() -> Tuple[str, int]:
         order_id=order_id, inventory_item_id=inventory_item_id,
     )
 
-    return json.dumps({"order_id", order_id}), HTTP_200_OK
+    return json.dumps({"order_id": order_id}), HTTP_200_OK
