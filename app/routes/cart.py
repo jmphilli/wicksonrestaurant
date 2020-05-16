@@ -11,7 +11,7 @@ blueprint = Blueprint("inventory", __name__)
 
 
 @blueprint.route("/add-line-item", methods=["POST"])
-def get_inventory():
+def add_line_item():
     data = request.get_data()
     try:
         parsed_data = json.loads(data)

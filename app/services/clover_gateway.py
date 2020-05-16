@@ -1,3 +1,6 @@
+from typing import Any
+from typing import Dict
+from typing import List
 from typing import Optional
 
 from cloverapi.cloverapi_client import CloverApiClient
@@ -23,18 +26,30 @@ class CloverService:
     def __init__(self, clover_client: Optional[CloverApiClient] = None) -> None:
         self.clover_client = clover_client or default_clover_api_client()
 
-    def get_inventory(self):
-        return self.clover_client.inventory_service.get_inventory_items()
+    def get_inventory(self) -> List[Dict[str, Any]]:
+        raw_data = self.clover_client.inventory_service.get_inventory_items()
+        return raw_data.get("elements", {})
 
-    def create_order(self):
+    def create_order(self) -> str:
         state = {"state": "open"}
-        self.clover_client.order_service.create_order(state)
+        resp = self.clover_client.order_service.create_order(state)
+        return resp.get("id")
 
-    def add_line_item(self, order_id: int, inventory_item_id: str):
+    def add_line_item(self, order_id: str, inventory_item_id: str):
         body = {"item": {"id": inventory_item_id}}
         self.clover_client.order_service.create_line_item(
             order_id, line_item=body,
         )
+
+    def get_line_items_for_order(self, order_id: str) -> List[Dict[str, Any]]:
+        data = self.clover_client.order_service.get_line_items_by_order(
+            order_id=order_id,
+        )
+        line_items = data["elements"]
+        return line_items
+
+    def get_pay_info(self):
+        return self.clover_client.merchant_service.get_gateway()
 
 
 DEFAULT_CLOVER_SERVICE: Optional[CloverService] = None
