@@ -35,7 +35,7 @@ class CloverService:
         resp = self.clover_client.order_service.create_order(state)
         return resp.get("id")
 
-    def add_line_item(self, order_id: str, inventory_item_id: str):
+    def add_line_item(self, order_id: str, inventory_item_id: str) -> None:
         body = {"item": {"id": inventory_item_id}}
         self.clover_client.order_service.create_line_item(
             order_id, line_item=body,
@@ -48,7 +48,8 @@ class CloverService:
         line_items = data["elements"]
         return line_items
 
-    def get_pay_info(self):
+    def get_pay_info(self) -> None:
+        # possibly unused?
         return self.clover_client.merchant_service.get_gateway()
 
 

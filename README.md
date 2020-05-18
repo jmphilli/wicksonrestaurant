@@ -6,3 +6,21 @@ __deploying__
 - use `scp-script`
 - verify in staging (:8080)
 - push to prod `./go-live.sh` on the prod host
+
+
+__plan for pickup + dine in__
+
+I'm using this as my design doc...
+I think what i want to do is
+
+- allow the user to add items to a "cart"
+  - this is really adding line items to some clover order
+  - todo allow removal of items (it's probably all js side so whatevs)
+- allow the user to "checkout"
+  - push them over to a stripe charge given the sum of line items + taxes
+  - looks like stripe provides this functionality via [this](https://stripe.com/docs/payments/checkout/one-time#creating-ad-hoc-prices)
+- on success
+  - update the order in the clover stack to have the associated charge
+  - render some sorta order number / id to the user so they know which one they were
+- on fail
+  - just drop all state and let them go back
