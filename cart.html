@@ -17,7 +17,7 @@
     <script src="https://js.stripe.com/v3/"></script>
 </head>
 
-<body>
+<>
 
 	<!--================ Start Header Area =================-->
 	<header class="header-area"> <!-- or site-header class -->
@@ -39,7 +39,17 @@
 	<div class="main-content" id="inventory">
 	</div>
 
+	<!-- Customer form-->
+	<input type="text" value="First Name" id="first_name">
+	<input type="text" value="Last Name" id="last_name">
+	<button onclick="addCustomerToOrder()">Add Name to order</button>
+	<!-- Note form -->
+	Dietary restrictions / pickup time / notes: <input type="text" id="note">
+	<button onclick="addNoteToOrder()">Add note to order [optional]</button>
+
+	<!-- hidden state -->
     <div id="order_id" hidden></div>
+	<div id="customer_id" hidden></div>
 
 	<!-- <button onclick="addToCart('${inventoryItem.id}')">Add</button> -->
 	<form id="payment-form">

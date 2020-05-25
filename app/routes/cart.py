@@ -49,10 +49,10 @@ def add_note_to_order() -> Tuple[str, int]:
     parsed_data = get_json()
     order_id = parsed_data.get("order_id")
     note = parsed_data.get("note")
-    if not order_id or not note:
-        return json.dumps({"error": "need order_id + note"}), HTTP_400_BAD_REQUEST
-    default_order_core_service().add_note(order_id=order_id, note=note)
-    return json.dumps({}), HTTP_200_OK
+    if not note:
+        return json.dumps({"error": "need note"}), HTTP_400_BAD_REQUEST
+    order_id = default_order_core_service().add_note(order_id=order_id, note=note)
+    return json.dumps({"order_id": order_id}), HTTP_200_OK
 
 
 @blueprint.route("/calculate-order-total", methods=["POST"])
