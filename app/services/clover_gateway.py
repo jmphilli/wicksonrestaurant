@@ -48,9 +48,31 @@ class CloverService:
         line_items = data["elements"]
         return line_items
 
-    def get_pay_info(self) -> None:
-        # possibly unused?
-        return self.clover_client.merchant_service.get_gateway()
+    def pay_for_order(self, order_id: str, stripe_reference: str, total: int) -> None:
+        payload = {
+            "id": order_id,
+            "externalReferenceId": stripe_reference,
+            "paymentState": "PAID",
+            "state": "locked",
+            "total": total,
+        }
+        self.clover_client.order_service.update_order_by_id(payload)
+
+    def add_note_to_order(self, order_id: str, note: str) -> None:
+        payload = {
+            "id": order_id,
+            "note": note,
+        }
+        self.clover_client.order_service.update_order_by_id(payload)
+
+    def create_customer(self, first_name: str, last_name: str) -> str:
+        payload = {"firstName": first_name, "lastName": last_name}
+        resp = self.clover_client.customer_service.create_customer(payload)
+        return resp["id"]
+
+    def add_customer_to_order(self, order_id: str, customer_id: str) -> None:
+        payload = {"id": order_id, "customers": [{"id": customer_id}]}
+        self.clover_client.order_service.update_order_by_id(payload)
 
 
 DEFAULT_CLOVER_SERVICE: Optional[CloverService] = None

@@ -34,3 +34,4 @@ I think what i want to do is
 - same with support@wicksonrestaurant.com
 - blurb about restaurant stataus somewhere "starting june 1 we are accepting seating etc etc"
 - send email when order ready
+-  Order Total: $0.00 set the order total for clover
