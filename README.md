@@ -14,13 +14,23 @@ I'm using this as my design doc...
 I think what i want to do is
 
 - allow the user to add items to a "cart"
-  - this is really adding line items to some clover order
   - todo allow removal of items (it's probably all js side so whatevs)
 - allow the user to "checkout"
   - push them over to a stripe charge given the sum of line items + taxes
-  - looks like stripe provides this functionality via [this](https://stripe.com/docs/payments/checkout/one-time#creating-ad-hoc-prices)
 - on success
   - update the order in the clover stack to have the associated charge
   - render some sorta order number / id to the user so they know which one they were
 - on fail
   - just drop all state and let them go back
+- tip + taxes
+- render total on page
+- metadata on clover order
+  - stripe token for successful charge
+  - schedule / dietary restrictions saved in order as well
+  - customer name for pickup
+- make page pretty
+- add to top level menu so people can navigate
+- possibly open orders@wicksonrestaurant.com
+- same with support@wicksonrestaurant.com
+- blurb about restaurant stataus somewhere "starting june 1 we are accepting seating etc etc"
+- send email when order ready

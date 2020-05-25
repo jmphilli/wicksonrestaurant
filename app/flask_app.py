@@ -21,7 +21,7 @@ def create_app() -> Flask:
     def healthcheck() -> str:
         return "OK"
 
-    @app.handle_exception(BadRequest)
+    @app.errorhandler(BadRequest)
     def handle_bad_request(_: BadRequest) -> Tuple[str, int]:
         return "{}", HTTP_400_BAD_REQUEST
 
