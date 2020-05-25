@@ -113,7 +113,7 @@ def charge_order() -> Tuple[str, int]:
         if intent.status == "succeeded":
             # Handle post-payment fulfillment
             default_order_core_service().mark_order_as_paid(
-                order_id=order_id, stripe_reference=intent.id,
+                order_id=order_id, stripe_reference=intent.id, total=total,
             )
             return json.dumps({"success": True}), HTTP_200_OK
         # Any other status would be unexpected, so error

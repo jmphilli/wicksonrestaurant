@@ -48,11 +48,12 @@ class CloverService:
         line_items = data["elements"]
         return line_items
 
-    def pay_for_order(self, order_id: str, stripe_reference: str) -> None:
+    def pay_for_order(self, order_id: str, stripe_reference: str, total: int) -> None:
         payload = {
             "id": order_id,
             "externalReferenceId": stripe_reference,
-            "paymentState": "PAID",
+            "state": "Paid",
+            "total": total,
         }
         self.clover_client.order_service.update_order_by_id(payload)
 

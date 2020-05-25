@@ -45,9 +45,11 @@ class OrderCoreService:
             total += line_item["price"]
         return total
 
-    def mark_order_as_paid(self, order_id: str, stripe_reference: str) -> None:
+    def mark_order_as_paid(
+        self, order_id: str, stripe_reference: str, total: int,
+    ) -> None:
         self.clover_service.pay_for_order(
-            order_id=order_id, stripe_reference=stripe_reference,
+            order_id=order_id, stripe_reference=stripe_reference, total=total,
         )
 
 
