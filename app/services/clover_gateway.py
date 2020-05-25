@@ -52,7 +52,8 @@ class CloverService:
         payload = {
             "id": order_id,
             "externalReferenceId": stripe_reference,
-            "state": "Paid",
+            "paymentState": "PAID",
+            "state": "locked",
             "total": total,
         }
         self.clover_client.order_service.update_order_by_id(payload)
