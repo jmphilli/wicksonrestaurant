@@ -30,6 +30,31 @@ def add_line_item() -> Tuple[str, int]:
     return json.dumps({"order_id": order_id}), HTTP_200_OK
 
 
+@blueprint.route("/add-customer-to-order", methods=["POST"])
+def add_customer_to_order() -> Tuple[str, int]:
+    parsed_data = get_json()
+    order_id = parsed_data.get("order_id")
+    first_name = parsed_data.get("first_name")
+    last_name = parsed_data.get("last_name")
+    if not first_name or not last_name:
+        return json.dumps({"error": "need both names"}), HTTP_400_BAD_REQUEST
+    customer_id, order_id = default_order_core_service().add_customer_to_order(
+        order_id=order_id, first_name=first_name, last_name=last_name,
+    )
+    return json.dumps({"customer_id": customer_id, "order_id": order_id}), HTTP_200_OK
+
+
+@blueprint.route("/add-note-to-order", methods=["POST"])
+def add_note_to_order() -> Tuple[str, int]:
+    parsed_data = get_json()
+    order_id = parsed_data.get("order_id")
+    note = parsed_data.get("note")
+    if not order_id or not note:
+        return json.dumps({"error": "need order_id + note"}), HTTP_400_BAD_REQUEST
+    default_order_core_service().add_note(order_id=order_id, note=note)
+    return json.dumps({}), HTTP_200_OK
+
+
 @blueprint.route("/calculate-order-total", methods=["POST"])
 def calculate_order_total() -> Tuple[str, int]:
     parsed_data = get_json()
@@ -49,6 +74,30 @@ def charge_order() -> Tuple[str, int]:
 
     try:
         # Create the PaymentIntent
+        """
+        https://stripe.com/docs/payments/without-card-authentication#web-how-this-integration-works
+        {
+          "id": "pi_0FdpcX589O8KAxCGR6tGNyWj",
+          "object": "payment_intent",
+          "amount": 1099,
+          "charges": {
+            "object": "list",
+            "data": [
+              {
+                "id": "ch_GA9w4aF29fYajT",
+                "object": "charge",
+                "amount": 1099,
+                "refunded": false,
+                "status": "succeeded",
+              }
+            ]
+          },
+          "client_secret": "pi_0FdpcX589O8KAxCGR6tGNyWj_secret_e00tjcVrSv2tjjufYqPNZBKZc",
+          "currency": "usd",
+          "last_payment_error": null,
+          "status": "succeeded",
+        }
+        """
         intent = stripe.PaymentIntent.create(
             amount=total,
             currency="usd",
@@ -63,6 +112,9 @@ def charge_order() -> Tuple[str, int]:
         )
         if intent.status == "succeeded":
             # Handle post-payment fulfillment
+            default_order_core_service().mark_order_as_paid(
+                order_id=order_id, stripe_reference=intent.id,
+            )
             return json.dumps({"success": True}), HTTP_200_OK
         # Any other status would be unexpected, so error
         return (
