@@ -1,6 +1,9 @@
+import math
 from typing import Optional
 from typing import Tuple
 
+from app.constants import STRIPE_FIXED_COST
+from app.constants import STRIPE_VARIABLE_COST
 from app.services.clover_gateway import CloverService
 from app.services.clover_gateway import default_clover_service
 
@@ -43,6 +46,8 @@ class OrderCoreService:
         total = 0
         for line_item in line_items:
             total += line_item["price"]
+        total += math.ceil(STRIPE_VARIABLE_COST * total)
+        total += STRIPE_FIXED_COST
         return total
 
     def mark_order_as_paid(

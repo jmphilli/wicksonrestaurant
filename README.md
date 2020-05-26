@@ -13,6 +13,13 @@ __plan for pickup + dine in__
 I'm using this as my design doc...
 I think what i want to do is
 
+- alexa
+  - schedule
+  - day before
+  - table availability - reserving
+  - send receipt - customer + restaurant
+  - clover pricing
+
 - allow the user to add items to a "cart"
   - todo allow removal of items (it's probably all js side so whatevs)
 - allow the user to "checkout"
