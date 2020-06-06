@@ -1,9 +1,13 @@
 import math
+from typing import Any
+from typing import Dict
+from typing import List
 from typing import Optional
 from typing import Tuple
 
 from app.constants import STRIPE_FIXED_COST
 from app.constants import STRIPE_VARIABLE_COST
+from app.constants import TAX_RATE
 from app.services.clover_gateway import CloverService
 from app.services.clover_gateway import default_clover_service
 
@@ -41,14 +45,29 @@ class OrderCoreService:
         )
         return order_id
 
-    def calculate_order_total(self, order_id: str) -> int:
-        line_items = self.clover_service.get_line_items_for_order(order_id=order_id)
+    def _calculate_total(self, line_items: List[Dict[str, Any]]) -> int:
         total = 0
         for line_item in line_items:
             total += line_item["price"]
+        # todo add taxes
         total += math.ceil(STRIPE_VARIABLE_COST * total)
         total += STRIPE_FIXED_COST
+        total += math.ceil(total * TAX_RATE)
         return total
+
+    def calculate_order_total(self, order_id: str) -> int:
+        line_items = self.clover_service.get_line_items_for_order(order_id=order_id)
+        return self._calculate_total(line_items)
+
+    def get_order_details(self, order_id: str) -> Dict[str, Any]:
+        line_items = self.clover_service.get_line_items_for_order(order_id=order_id)
+        total_cost = self._calculate_total(line_items)
+        return {
+            "line_items": line_items,
+            "total_cost": total_cost,
+            "tax": 3,
+            "tip": 3,
+        }
 
     def mark_order_as_paid(
         self, order_id: str, stripe_reference: str, total: int,

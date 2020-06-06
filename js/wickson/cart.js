@@ -1,12 +1,16 @@
 // make a request to get every item and return the items
 var siteUrl = 'http://wicksonrestaurant.com:8080';  // staging
 // var siteUrl = 'https://wicksonrestaurant.com';  // prod
+
+function currencyString(rawAmount) {
+    return (rawAmount / 100).toFixed(2)
+}
 function parseInventoryItem(item) {
     return {
         id: item.id,
         name: item.name,
-        price: (item.price/100).toFixed(2),
-        category: (item.categories.)
+        price: currencyString(item.price),
+        category: item.category,
         // probably add image if they've got it
     };
 }
@@ -25,47 +29,114 @@ function getInventory() {
         .then(inventory => parseInventory(inventory))
 }
 
+function getOrderDetails() {
+    var order_id = getOrderId();
+    return fetch(siteUrl + '/order-details', {
+        headers: { "Content-Type": "application/json; charset=utf-8" },
+        method: 'GET',
+        body: JSON.stringify({
+            order_id: order_id,
+        })
+    }).then(response => response.json())
+        .then(details => parse_details(details))
+}
+
+function createInventoryHtml(inventoryItem) {
+    // pretty
+    // minus
+    // counter
+    return `<div class="m-0 col-lg-6 col-sm-6">${inventoryItem.name} -- \$ ${inventoryItem.price}<button onclick="addToCart('${inventoryItem.id}')">Add</button></div>`;
+}
+
 function buildHtmlInventory(inventory) {
-    var htmlString = '';
+    var snackString = '';
+    var entreeString = '';
+    var drinkString = '';
     inventory.forEach(function (inventoryItem) {
-        //todo a minus / remove button and number of items
-        htmlString += `<div inventory_id="${inventoryItem.id}" class="inventory-item">${inventoryItem.name} -- \$ ${inventoryItem.price}</div><button onclick="addToCart('${inventoryItem.id}')">Add</button>`;
+        if (inventoryItem.category != null && inventoryItem.category !== undefined) {
+            if (inventoryItem.category.toLowerCase() == 'extras') {
+                snackString += createInventoryHtml(inventoryItem);
+            } else if (inventoryItem.category.toLowerCase() == 'quesadillas') {
+                entreeString += createInventoryHtml(inventoryItem);
+            } else if (inventoryItem.category.toLowerCase() == 'soup') {
+                drinkString += createInventoryHtml(inventoryItem);
+            }
+        }
     });
-    return htmlString;
+    return {
+        snacks: snackString,
+        drinks: drinkString,
+        entrees: entreeString
+    };
 }
 
 function _render() {
     return getInventory().then(inventory => buildHtmlInventory(inventory));
 }
 
+function _render_order_details() {
+    return getOrderDetails().then(inventory => buildHtmlInventory(inventory));
+}
+
 function renderInventory() {
-    var node = document.querySelector('#inventory');
-    _render().then(htmlString => node.innerHTML = htmlString);
+    var snackNode = document.querySelector('#snacks');
+    if (snackNode == null || snackNode === undefined) {
+        return
+    }
+    var entreeNode = document.querySelector('#entrees');
+    var drinksNode = document.querySelector('#drinks');
+    _render().then(strings => {
+        snackNode.innerHTML = strings.snacks;
+        entreeNode.innerHTML = strings.entrees;
+        drinksNode.innerHTML = strings.drinks;
+    });
+}
+
+function renderOrderDetails() {
+    var orderDetailsNode = document.querySelector('#order-details');
+    if (orderDetailsNode == null || orderDetailsNode === undefined) {
+        return
+    }
+    _render_order_details().then(strings => {
+    });
 }
 
 function getOrderId() {
     var node = document.querySelector('#order_id');
-    return node.innerHTML;
+    var order_id = node.innerHTML;
+    if (order_id != null && order_id !== undefined) {
+        return order_id;
+    }
+    var urlParams = new URLSearchParams(window.location.search);
+    order_id = urlParams.get('order_id');
+    if (order_id != null && order_id !== undefined) {
+        setOrderId(order_id); // so it's on the page now
+        return order_id;
+    }
 }
 
 function setOrderId(orderId) {
     var node = document.querySelector('#order_id');
     node.innerHTML = orderId;
+    var formOrderId = document.querySelector('#order-id-form');
+    formOrderId.value = orderId;
 }
 
-function getCustomerId() {
-    var node = document.querySelector('#customer_id');
-    return node.innerHTML;
-}
-
-function setCustomerId(customerId) {
-    var node = document.querySelector('#customer_id');
-    node.innerHTML = customerId;
+function calculateTotal(order_id) {
+    return fetch(siteUrl + '/calculate-order-total', {
+        headers: { "Content-Type": "application/json; charset=utf-8" },
+        method: 'POST',
+        body: JSON.stringify({
+            order_id: order_id,
+        })
+    }).then(response => response.json()).then(total => {
+        var totalNode = document.querySelector('#total');
+        totalNode.innerHTML = "$" + currencyString(total.order_total);
+    })
 }
 
 function addToCart(inventoryId) {
     var orderId = getOrderId();
-    console.log('order id is ' + orderId);
     return fetch(siteUrl + '/add-line-item', {
         headers: { "Content-Type": "application/json; charset=utf-8" },
         method: 'POST',
@@ -78,6 +149,7 @@ function addToCart(inventoryId) {
             //todo - if we want state, per browser, between tabs, i can probably use local storage.
             order_id = order_body.order_id;
             setOrderId(order_id);
+            calculateTotal(order_id);
     });
 }
 
@@ -85,9 +157,6 @@ function addCustomerToOrder() {
     var orderId = getOrderId();
     var firstName = document.querySelector('#first_name').value;
     var lastName = document.querySelector('#last_name').value;
-    console.log(firstName);
-    console.log(lastName);
-    console.log('done');
     if (!firstName || !lastName){
         alert('name not set');
         return;
@@ -102,10 +171,8 @@ function addCustomerToOrder() {
         })
     }).then(response => response.json())
         .then(order_body => {
-            customer_id = order_body.customer_id;
             order_id = order_body.order_id;
             setOrderId(order_id);
-            setCustomerId(customer_id);
     });
 }
 
@@ -127,6 +194,7 @@ function addNoteToOrder() {
 }
 
 renderInventory();
+renderOrderDetails();
 
 
 // todo @jmphilli - block any interaction while waiting for server to respond / document new singleton order id

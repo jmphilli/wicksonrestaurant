@@ -34,33 +34,12 @@
 	</header>
 	<!--================ End Header Area =================-->
 	<div class="main-content" id="inventory">
-
-		<h1>Snacks</h1>
-			<div id="snacks" class="row"></div>
-		<h1>Entrees</h1>
-			<div id="entrees" class="row"></div>
-		<h1>Drinks</h1>
-			<div id="drinks" class="row"></div>
-
-		<h3>Total (tax included)</h3>
-		<div id="total"></div>
-
-		<form action="/customer.html" method="get">
-			<input type="hidden" name="order_id" id="order-id-form"/>
-			<input type="submit" value="Next" name="Next" id="next-link"/>
-		</form>
-
-		<!-- hidden state -->
-		<div id="order_id" hidden></div>
-
-		<!-- payment form
+        <div id="order-details"></div>
 		<form id="payment-form">
 		  <div id="card-element"></div>
 		  <button id="card-button">Submit Payment</button>
 		  <p id="payment-result"></p>
 		</form>
-		-->
-
 	</div>
 	<!--================ Start Footer Area =================-->
 	<footer class="footer-area section-gap">

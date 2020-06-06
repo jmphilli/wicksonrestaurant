@@ -22,10 +22,10 @@ I think what i want to do is
   - clover pricing
 
 - allow the user to add items to a "cart"
+  - make page pretty
   - todo allow removal of items (it's probably all js side so whatevs)
   - render total on page
   - tip + taxes
-  - make page pretty
   - add to top level menu so people can navigate
 
 - allow the user to "checkout"

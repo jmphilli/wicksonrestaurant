@@ -63,6 +63,14 @@ def calculate_order_total() -> Tuple[str, int]:
     return json.dumps({"order_total": total}), HTTP_200_OK
 
 
+@blueprint.route("/order-details", methods=["GET"])
+def get_order_details() -> Tuple[str, int]:
+    parsed_data = get_json()
+    order_id = cast(str, parsed_data.get("order_id"))
+    details = default_order_core_service().get_order_details(order_id)
+    return json.dumps(details), HTTP_200_OK
+
+
 @blueprint.route("/charge", methods=["POST"])
 def charge_order() -> Tuple[str, int]:
     parsed_data = get_json()
@@ -73,31 +81,6 @@ def charge_order() -> Tuple[str, int]:
     total = default_order_core_service().calculate_order_total(order_id)
 
     try:
-        # Create the PaymentIntent
-        """
-        https://stripe.com/docs/payments/without-card-authentication#web-how-this-integration-works
-        {
-          "id": "pi_0FdpcX589O8KAxCGR6tGNyWj",
-          "object": "payment_intent",
-          "amount": 1099,
-          "charges": {
-            "object": "list",
-            "data": [
-              {
-                "id": "ch_GA9w4aF29fYajT",
-                "object": "charge",
-                "amount": 1099,
-                "refunded": false,
-                "status": "succeeded",
-              }
-            ]
-          },
-          "client_secret": "pi_0FdpcX589O8KAxCGR6tGNyWj_secret_e00tjcVrSv2tjjufYqPNZBKZc",
-          "currency": "usd",
-          "last_payment_error": null,
-          "status": "succeeded",
-        }
-        """
         intent = stripe.PaymentIntent.create(
             amount=total,
             currency="usd",
