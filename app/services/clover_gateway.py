@@ -27,7 +27,9 @@ class CloverService:
         self.clover_client = clover_client or default_clover_api_client()
 
     def get_inventory(self) -> List[Dict[str, Any]]:
-        raw_data = self.clover_client.inventory_service.get_inventory_items()
+        raw_data = self.clover_client.inventory_service.get_inventory_items(
+            expand="categories",
+        )
         return raw_data.get("elements", {})
 
     def create_order(self) -> str:

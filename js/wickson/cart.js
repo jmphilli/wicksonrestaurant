@@ -6,6 +6,7 @@ function parseInventoryItem(item) {
         id: item.id,
         name: item.name,
         price: (item.price/100).toFixed(2),
+        category: (item.categories.)
         // probably add image if they've got it
     };
 }
@@ -27,7 +28,8 @@ function getInventory() {
 function buildHtmlInventory(inventory) {
     var htmlString = '';
     inventory.forEach(function (inventoryItem) {
-        htmlString += `<div inventory_id="${inventoryItem.id}">${inventoryItem.name} -- \$ ${inventoryItem.price}</div><button onclick="addToCart('${inventoryItem.id}')">Add</button>`;
+        //todo a minus / remove button and number of items
+        htmlString += `<div inventory_id="${inventoryItem.id}" class="inventory-item">${inventoryItem.name} -- \$ ${inventoryItem.price}</div><button onclick="addToCart('${inventoryItem.id}')">Add</button>`;
     });
     return htmlString;
 }
