@@ -49,7 +49,6 @@ class OrderCoreService:
         total = 0
         for line_item in line_items:
             total += line_item["price"]
-        # todo add taxes
         total += math.ceil(STRIPE_VARIABLE_COST * total)
         total += STRIPE_FIXED_COST
         total += math.ceil(total * TAX_RATE)
