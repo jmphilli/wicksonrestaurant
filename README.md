@@ -34,4 +34,7 @@ I think what i want to do is
 - on fail
   - just drop all state and let them go back
 
-- send email when order ready
+- pm notes
+    - send email when order ready
+    - break out schedule for when they want to pickup - start with dropdown of hours
+    - add dine in option

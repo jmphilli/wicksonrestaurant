@@ -82,7 +82,7 @@ def charge_order() -> Tuple[str, int]:
     if not order_id or not payment_method_id:
         return json.dumps({"error": "order | payment missing"}), HTTP_400_BAD_REQUEST
     total = default_order_core_service().calculate_order_total(order_id)
-
+    # todo prevent double charge by checking order is not paid
     try:
         intent = stripe.PaymentIntent.create(
             amount=total,
