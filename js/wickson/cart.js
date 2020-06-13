@@ -31,14 +31,12 @@ function getInventory() {
 
 function getOrderDetails() {
     var order_id = getOrderId();
-    return fetch(siteUrl + '/order-details', {
+    return fetch(siteUrl + '/order-details?order_id=' + order_id, {
         headers: { "Content-Type": "application/json; charset=utf-8" },
-        method: 'GET',
-        body: JSON.stringify({
-            order_id: order_id,
-        })
-    }).then(response => response.json())
-        .then(details => parse_details(details))
+        method: 'GET'
+    })
+        .then(response => response.json())
+        .then(details => parseDetails(details))
 }
 
 function createInventoryHtml(inventoryItem) {
@@ -70,12 +68,58 @@ function buildHtmlInventory(inventory) {
     };
 }
 
+function renderOrderItem(orderItem) {
+    var priceString = '$' + currencyString(orderItem['price']);
+    return `<div class="m-0 col-lg-6 col-sm-6">${orderItem['name']}</div><div class="m-0 col-lg-6 col-sm-6">${priceString}</div>`;
+}
+
+function buildHtmlOrderDetails(orderDetails) {
+    var itemsString = '';
+    var priceString = `
+<h2>Tip</h2>
+<div class="m-0 col-lg-6 col-sm-6">${orderDetails['tip']}</div>
+<h2>Tax</h2>
+<div class="m-0 col-lg-6 col-sm-6">${orderDetails['tax']}</div>
+<h2>Total</h2>
+<div class="m-0 col-lg-6 col-sm-6">${orderDetails['totalCost']}</div>
+`;
+    orderDetails.lineItems.forEach(
+        function (orderDetail) {
+            itemsString += renderOrderItem(orderDetail);
+        }
+    );
+
+    return {
+        itemBreakdown: itemsString,
+        priceBreakdown: priceString,
+    }
+}
+
+function parseDetails(orderDetails) {
+    /*
+    {'line_items': [
+    {"id": "1E4YJX681Q4N4", "item_id": "M7BVBV780YZN0", "name": "Bowl of Soup", "price": 450}
+    'total_cost': 961, 'tax': 3, 'tip': 3}
+     */
+    var totalCost = currencyString(orderDetails['total_cost']);
+    var tax = currencyString(orderDetails['tax']);
+    var tip = currencyString(orderDetails['tip']);
+    var lineItems = orderDetails['line_items']; // probably mash together total quantity
+
+    return {
+        totalCost: '$' + totalCost,
+        tax: '$' + tax,
+        tip: '$' + tip,
+        lineItems: lineItems
+    }
+}
+
 function _render() {
     return getInventory().then(inventory => buildHtmlInventory(inventory));
 }
 
 function _render_order_details() {
-    return getOrderDetails().then(inventory => buildHtmlInventory(inventory));
+    return getOrderDetails().then(orderDetails => buildHtmlOrderDetails(orderDetails));
 }
 
 function renderInventory() {
@@ -95,16 +139,20 @@ function renderInventory() {
 function renderOrderDetails() {
     var orderDetailsNode = document.querySelector('#order-details');
     if (orderDetailsNode == null || orderDetailsNode === undefined) {
-        return
+        return // different page rendering
     }
+    var itemBreakdownNode = document.querySelector('#item-breakdown');
+    var priceBreakdownNode = document.querySelector('#price-breakdown');
     _render_order_details().then(strings => {
+        itemBreakdownNode.innerHTML = strings.itemBreakdown;
+        priceBreakdownNode.innerHTML = strings.priceBreakdown;
     });
 }
 
 function getOrderId() {
     var node = document.querySelector('#order_id');
     var order_id = node.innerHTML;
-    if (order_id != null && order_id !== undefined) {
+    if (order_id != null && order_id !== undefined && order_id !== "") {
         return order_id;
     }
     var urlParams = new URLSearchParams(window.location.search);
@@ -119,7 +167,9 @@ function setOrderId(orderId) {
     var node = document.querySelector('#order_id');
     node.innerHTML = orderId;
     var formOrderId = document.querySelector('#order-id-form');
-    formOrderId.value = orderId;
+    if (formOrderId) {
+        formOrderId.value = orderId;
+    }
 }
 
 function calculateTotal(order_id) {

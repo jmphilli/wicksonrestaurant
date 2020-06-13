@@ -4,11 +4,13 @@ from typing import Tuple
 
 import stripe
 from flask import Blueprint
+from flask import request
 
 from app.constants import HTTP_200_OK
 from app.constants import HTTP_400_BAD_REQUEST
 from app.constants import HTTP_500_INTERNAL_SERVER_ERROR
 from app.core_services.order import default_order_core_service
+from app.exceptions import BadRequest
 from app.routes.helpers import get_json
 from app.settings import STRIPE_SECRET_KEY
 
@@ -65,8 +67,9 @@ def calculate_order_total() -> Tuple[str, int]:
 
 @blueprint.route("/order-details", methods=["GET"])
 def get_order_details() -> Tuple[str, int]:
-    parsed_data = get_json()
-    order_id = cast(str, parsed_data.get("order_id"))
+    order_id = request.args.get("order_id")
+    if not order_id:
+        raise BadRequest
     details = default_order_core_service().get_order_details(order_id)
     return json.dumps(details), HTTP_200_OK
 
