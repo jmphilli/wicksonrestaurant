@@ -1,6 +1,13 @@
+import math
+from typing import Any
+from typing import Dict
+from typing import List
 from typing import Optional
 from typing import Tuple
 
+from app.constants import STRIPE_FIXED_COST
+from app.constants import STRIPE_VARIABLE_COST
+from app.constants import TAX_RATE
 from app.services.clover_gateway import CloverService
 from app.services.clover_gateway import default_clover_service
 
@@ -38,12 +45,44 @@ class OrderCoreService:
         )
         return order_id
 
-    def calculate_order_total(self, order_id: str) -> int:
-        line_items = self.clover_service.get_line_items_for_order(order_id=order_id)
+    def _calculate_total_and_tax(
+        self, line_items: List[Dict[str, Any]],
+    ) -> Tuple[int, int]:
         total = 0
         for line_item in line_items:
             total += line_item["price"]
-        return total
+        total += math.ceil(STRIPE_VARIABLE_COST * total)
+        total += STRIPE_FIXED_COST
+        tax = self._calculate_tax(running_total=total)
+        total += tax
+        return total, tax
+
+    def _calculate_tax(self, running_total: float) -> int:
+        return math.ceil(running_total * TAX_RATE)
+
+    def calculate_order_total(self, order_id: str) -> int:
+        line_items = self.clover_service.get_line_items_for_order(order_id=order_id)
+        return self._calculate_total_and_tax(line_items)[0]
+
+    def get_order_details(self, order_id: str) -> Dict[str, Any]:
+        line_items = self.clover_service.get_line_items_for_order(order_id=order_id)
+        total_cost, tax = self._calculate_total_and_tax(line_items)
+        parsed_line_items = []
+        for line_item in line_items:
+            parsed_line_items.append(
+                {
+                    "id": line_item["id"],
+                    "item_id": line_item["item"]["id"],
+                    "name": line_item["name"],
+                    "price": line_item["price"],
+                },
+            )
+        return {
+            "line_items": parsed_line_items,
+            "total_cost": total_cost,
+            "tax": tax,
+            "tip": 3,
+        }
 
     def mark_order_as_paid(
         self, order_id: str, stripe_reference: str, total: int,

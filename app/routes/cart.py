@@ -4,11 +4,13 @@ from typing import Tuple
 
 import stripe
 from flask import Blueprint
+from flask import request
 
 from app.constants import HTTP_200_OK
 from app.constants import HTTP_400_BAD_REQUEST
 from app.constants import HTTP_500_INTERNAL_SERVER_ERROR
 from app.core_services.order import default_order_core_service
+from app.exceptions import BadRequest
 from app.routes.helpers import get_json
 from app.settings import STRIPE_SECRET_KEY
 
@@ -63,6 +65,15 @@ def calculate_order_total() -> Tuple[str, int]:
     return json.dumps({"order_total": total}), HTTP_200_OK
 
 
+@blueprint.route("/order-details", methods=["GET"])
+def get_order_details() -> Tuple[str, int]:
+    order_id = request.args.get("order_id")
+    if not order_id:
+        raise BadRequest
+    details = default_order_core_service().get_order_details(order_id)
+    return json.dumps(details), HTTP_200_OK
+
+
 @blueprint.route("/charge", methods=["POST"])
 def charge_order() -> Tuple[str, int]:
     parsed_data = get_json()
@@ -71,33 +82,8 @@ def charge_order() -> Tuple[str, int]:
     if not order_id or not payment_method_id:
         return json.dumps({"error": "order | payment missing"}), HTTP_400_BAD_REQUEST
     total = default_order_core_service().calculate_order_total(order_id)
-
+    # todo prevent double charge by checking order is not paid
     try:
-        # Create the PaymentIntent
-        """
-        https://stripe.com/docs/payments/without-card-authentication#web-how-this-integration-works
-        {
-          "id": "pi_0FdpcX589O8KAxCGR6tGNyWj",
-          "object": "payment_intent",
-          "amount": 1099,
-          "charges": {
-            "object": "list",
-            "data": [
-              {
-                "id": "ch_GA9w4aF29fYajT",
-                "object": "charge",
-                "amount": 1099,
-                "refunded": false,
-                "status": "succeeded",
-              }
-            ]
-          },
-          "client_secret": "pi_0FdpcX589O8KAxCGR6tGNyWj_secret_e00tjcVrSv2tjjufYqPNZBKZc",
-          "currency": "usd",
-          "last_payment_error": null,
-          "status": "succeeded",
-        }
-        """
         intent = stripe.PaymentIntent.create(
             amount=total,
             currency="usd",
@@ -115,7 +101,7 @@ def charge_order() -> Tuple[str, int]:
             default_order_core_service().mark_order_as_paid(
                 order_id=order_id, stripe_reference=intent.id, total=total,
             )
-            return json.dumps({"success": True}), HTTP_200_OK
+            return json.dumps({"success": True, "order_id": order_id}), HTTP_200_OK
         # Any other status would be unexpected, so error
         return (
             json.dumps({"error": "Invalid PaymentIntent status"}),

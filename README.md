@@ -13,25 +13,28 @@ __plan for pickup + dine in__
 I'm using this as my design doc...
 I think what i want to do is
 
+
+- alexa
+  - schedule
+  - day before
+  - table availability - reserving
+  - send receipt - customer + restaurant
+  - clover pricing
+
 - allow the user to add items to a "cart"
+  - make page pretty
   - todo allow removal of items (it's probably all js side so whatevs)
+  - tip
+  - add to top level menu so people can navigate
+
 - allow the user to "checkout"
-  - push them over to a stripe charge given the sum of line items + taxes
+- ensure idempotent charging
 - on success
-  - update the order in the clover stack to have the associated charge
   - render some sorta order number / id to the user so they know which one they were
 - on fail
   - just drop all state and let them go back
-- tip + taxes
-- render total on page
-- metadata on clover order
-  - stripe token for successful charge
-  - schedule / dietary restrictions saved in order as well
-  - customer name for pickup
-- make page pretty
-- add to top level menu so people can navigate
-- possibly open orders@wicksonrestaurant.com
-- same with support@wicksonrestaurant.com
-- blurb about restaurant stataus somewhere "starting june 1 we are accepting seating etc etc"
-- send email when order ready
--  Order Total: $0.00 set the order total for clover
+
+- pm notes
+    - send email when order ready
+    - break out schedule for when they want to pickup - start with dropdown of hours
+    - add dine in option
