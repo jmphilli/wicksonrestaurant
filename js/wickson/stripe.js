@@ -53,6 +53,6 @@ function handleServerResponse(responseJson) {
     resultContainer.textContent = responseJson.error;
   } else {
     // Show a success message
-    resultContainer.textContent = 'Success!';
+    resultContainer.textContent = 'Your order has been processed. Your order id is ' + responseJson['order_id'];
   }
 }

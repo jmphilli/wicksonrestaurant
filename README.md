@@ -24,16 +24,13 @@ I think what i want to do is
 - allow the user to add items to a "cart"
   - make page pretty
   - todo allow removal of items (it's probably all js side so whatevs)
-  - render total on page
-  - tip + taxes
+  - tip
   - add to top level menu so people can navigate
 
 - allow the user to "checkout"
-  - push them over to a stripe charge given the sum of line items + taxes
+- ensure idempotent charging
 - on success
-  - update the order in the clover stack to have the associated charge
   - render some sorta order number / id to the user so they know which one they were
-  - only need to communicate to staff that it's paid, not anywhere in clover stack
 - on fail
   - just drop all state and let them go back
 
