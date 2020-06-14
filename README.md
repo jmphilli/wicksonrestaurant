@@ -38,3 +38,7 @@ I think what i want to do is
     - send email when order ready
     - break out schedule for when they want to pickup - start with dropdown of hours
     - add dine in option
+    - add email to note web page
+    - only one button on note web page
+    - dine in only collect email
+    - pickup email + phone
