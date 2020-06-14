@@ -8,34 +8,28 @@ __deploying__
 - push to prod `./go-live.sh` on the prod host
 
 
-__plan for pickup + dine in__
-
-I'm using this as my design doc...
-I think what i want to do is
-
-
-- alexa
-  - schedule
-  - day before
+- schedule
   - table availability - reserving
-  - send receipt - customer + restaurant
-  - clover pricing
+  - day before
+    - break out schedule for when they want to pickup - start with dropdown of hours
+    - add dine in option
+
+- tip - need place to add it (cart.html)
+
+- email
+  - gmail auth for from + history
+  - curl / wget the receipt clover email
+  - use that as body
 
 - allow the user to add items to a "cart"
   - make page pretty
   - todo allow removal of items (it's probably all js side so whatevs)
-  - tip
   - add to top level menu so people can navigate
 
 - allow the user to "checkout"
-- ensure idempotent charging
 - on success
-  - render some sorta order number / id to the user so they know which one they were
+  - send email
 - on fail
   - just drop all state and let them go back
 
-- pm notes
-    - send email when order ready
-    - break out schedule for when they want to pickup - start with dropdown of hours
-    - add dine in option
-    - dine in only collect email
+- dine in only collect email

@@ -32,6 +32,16 @@ def add_line_item() -> Tuple[str, int]:
     return json.dumps({"order_id": order_id}), HTTP_200_OK
 
 
+@blueprint.route("/add-tip", methods=["POST"])
+def add_tip() -> Tuple[str, int]:
+    parsed_data = get_json()
+    order_id = cast(str, parsed_data.get("order_id"))
+    tip_amount = cast(int, parsed_data.get("tip_amount"))
+    default_order_core_service().add_tip(order_id=order_id, tip_amount=tip_amount)
+
+    return json.dumps({"order_id": order_id}), HTTP_200_OK
+
+
 @blueprint.route("/add-customer", methods=["POST"])
 def add_customer_to_order() -> Tuple[str, int]:
     parsed_data = get_json()
@@ -79,7 +89,8 @@ def charge_order() -> Tuple[str, int]:
     if not order_id or not payment_method_id:
         return json.dumps({"error": "order | payment missing"}), HTTP_400_BAD_REQUEST
     total = default_order_core_service().calculate_order_total(order_id)
-    # todo prevent double charge by checking order is not paid
+    if default_order_core_service().order_is_paid(order_id):
+        return json.dumps({"success": True, "order_id": order_id}), HTTP_200_OK
     try:
         intent = stripe.PaymentIntent.create(
             amount=total,
@@ -98,6 +109,7 @@ def charge_order() -> Tuple[str, int]:
             default_order_core_service().mark_order_as_paid(
                 order_id=order_id, stripe_reference=intent.id, total=total,
             )
+
             return json.dumps({"success": True, "order_id": order_id}), HTTP_200_OK
         # Any other status would be unexpected, so error
         return (

@@ -48,17 +48,25 @@ class OrderCoreService:
         )
         return order_id
 
+    def add_tip(self, order_id: str, tip_amount: int) -> None:
+        self.clover_service.add_tip(order_id=order_id, tip_amount=tip_amount)
+        return
+
     def _calculate_total_and_tax(
         self, line_items: List[Dict[str, Any]],
-    ) -> Tuple[int, int]:
+    ) -> Tuple[int, int, int]:
         total = 0
+        tip = 0
         for line_item in line_items:
+            if line_item.get("name") == "tip":
+                tip = line_item["price"]
             total += line_item["price"]
-        total += math.ceil(STRIPE_VARIABLE_COST * total)
         total += STRIPE_FIXED_COST
-        tax = self._calculate_tax(running_total=total)
+        tax = self._calculate_tax(running_total=total)  # no tip?
         total += tax
-        return total, tax
+        # last one
+        total += math.ceil(STRIPE_VARIABLE_COST * total)
+        return total, tip, tax
 
     def _calculate_tax(self, running_total: float) -> int:
         return math.ceil(running_total * TAX_RATE)
@@ -69,13 +77,13 @@ class OrderCoreService:
 
     def get_order_details(self, order_id: str) -> Dict[str, Any]:
         line_items = self.clover_service.get_line_items_for_order(order_id=order_id)
-        total_cost, tax = self._calculate_total_and_tax(line_items)
+        total_cost, tip, tax = self._calculate_total_and_tax(line_items)
         parsed_line_items = []
         for line_item in line_items:
             parsed_line_items.append(
                 {
-                    "id": line_item["id"],
-                    "item_id": line_item["item"]["id"],
+                    "id": line_item.get("id", 0),
+                    "item_id": line_item.get("item", {}).get("id", 0),
                     "name": line_item["name"],
                     "price": line_item["price"],
                 },
@@ -84,7 +92,7 @@ class OrderCoreService:
             "line_items": parsed_line_items,
             "total_cost": total_cost,
             "tax": tax,
-            "tip": 3,
+            "tip": tip,
         }
 
     def mark_order_as_paid(
@@ -93,6 +101,12 @@ class OrderCoreService:
         self.clover_service.pay_for_order(
             order_id=order_id, stripe_reference=stripe_reference, total=total,
         )
+
+    def order_is_paid(self, order_id: str) -> bool:
+        order = self.clover_service.get_order(order_id=order_id)
+        if order.get("externalReferenceId"):
+            return True
+        return False
 
 
 _DEFAULT_ORDER_CORE_SERVICE: Optional[OrderCoreService] = None

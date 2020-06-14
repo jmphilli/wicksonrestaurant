@@ -43,6 +43,10 @@ class CloverService:
             order_id, line_item=body,
         )
 
+    def add_tip(self, order_id: str, tip_amount: int) -> None:
+        body = {"price": tip_amount, "name": "tip"}
+        self.clover_client.order_service.create_line_item(order_id, line_item=body)
+
     def get_line_items_for_order(self, order_id: str) -> List[Dict[str, Any]]:
         data = self.clover_client.order_service.get_line_items_by_order(
             order_id=order_id,
@@ -59,6 +63,9 @@ class CloverService:
             "total": total,
         }
         self.clover_client.order_service.update_order_by_id(payload)
+
+    def get_order(self, order_id: str) -> Dict[str, Any]:
+        return self.clover_client.order_service.get_order_by_id(order_id=order_id)
 
     def add_note_to_order(self, order_id: str, note: str) -> None:
         payload = {
