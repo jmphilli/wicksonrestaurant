@@ -21,21 +21,24 @@ class OrderCoreService:
             return self.clover_service.create_order()
         return order_id
 
-    def add_note(self, order_id: Optional[str], note: str) -> str:
-        order_id = self._ensure_order_id(order_id=order_id)
-        self.clover_service.add_note_to_order(order_id, note)
-        return order_id
-
     def add_customer_to_order(
-        self, order_id: Optional[str], first_name: str, last_name: str,
+        self,
+        order_id: Optional[str],
+        first_name: str,
+        last_name: str,
+        email: str,
+        phone: str,
+        note: Optional[str],
     ) -> Tuple[str, str]:
         order_id = self._ensure_order_id(order_id=order_id)
         customer_id = self.clover_service.create_customer(
-            first_name=first_name, last_name=last_name,
+            first_name=first_name, last_name=last_name, email=email, phone=phone,
         )
         self.clover_service.add_customer_to_order(
             order_id=order_id, customer_id=customer_id,
         )
+        if note:
+            self.clover_service.add_note_to_order(order_id, note)
         return customer_id, order_id
 
     def add_line_item(self, inventory_item_id: str, order_id: Optional[str]) -> str:

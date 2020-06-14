@@ -67,8 +67,15 @@ class CloverService:
         }
         self.clover_client.order_service.update_order_by_id(payload)
 
-    def create_customer(self, first_name: str, last_name: str) -> str:
-        payload = {"firstName": first_name, "lastName": last_name}
+    def create_customer(
+        self, first_name: str, last_name: str, email: str, phone: str,
+    ) -> str:
+        payload = {
+            "firstName": first_name,
+            "lastName": last_name,
+            "emailAddresses": [{"emailAddress": email}],
+            "phoneNumbers": [{"phoneNumber": phone}],
+        }
         resp = self.clover_client.customer_service.create_customer(payload)
         return resp["id"]
 

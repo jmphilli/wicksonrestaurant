@@ -35,18 +35,22 @@
 	<!--================ End Header Area =================-->
 	<div class="main-content">
 		<!-- Customer form-->
-		<input type="text" value="First Name" id="first_name">
-		<input type="text" value="Last Name" id="last_name">
-		<button onclick="addCustomerToOrder()">Add Name to order</button>
-
+        <form action="javascript:void(0);" onsubmit="return addCustomerToOrder();" method="get">
+		<label>First Name</label>
+		<input type="text" value="" id="first_name">
+		<label>Last Name</label>
+		<input type="text" value="" id="last_name">
         <br/>
+		<label>Email</label>
+		<input type="email" value="" id="customer_email">
+		<br/>
+		<label>Phone Number</label>
+		<input type="tel" value="" id="phone_number">
 		<!-- Note form -->
-		Dietary restrictions / pickup time / notes: <input type="text" id="note">
-		<button onclick="addNoteToOrder()">Add note to order [optional]</button>
-
-        <form action="/checkout.html" method="get">
-			<input type="hidden" name="order_id" id="order-id-form"/>
-			<input type="submit" value="Checkout" name="Next" id="checkout-link"/>
+		<label>Dietary restrictions / notes:</label><input type="text" id="note">
+		<br/>
+		<input type="hidden" name="order_id" id="order-id-form"/>
+		<input type="submit" value="Checkout" name="Next" id="checkout-link"/>
 		</form>
 		<!-- hidden state -->
 		<div id="order_id" hidden></div>
