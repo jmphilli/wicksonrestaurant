@@ -85,7 +85,9 @@ function buildHtmlOrderDetails(orderDetails) {
 `;
     orderDetails.lineItems.forEach(
         function (orderDetail) {
-            itemsString += renderOrderItem(orderDetail);
+            if (orderDetail['name'] !== 'tip') {
+                itemsString += renderOrderItem(orderDetail);
+            }
         }
     );
 

@@ -8,28 +8,28 @@ __deploying__
 - push to prod `./go-live.sh` on the prod host
 
 
-- schedule
-  - table availability - reserving
-  - day before
-    - break out schedule for when they want to pickup - start with dropdown of hours
-    - add dine in option
-
-- tip - need place to add it (cart.html)
-
 - email
   - gmail auth for from + history
   - curl / wget the receipt clover email
   - use that as body
+  - add info about pickup time / location (window behind the yadda yadda)
 
 - allow the user to add items to a "cart"
+  - tip - need place to add it (cart.html)
+  - render order details somewhere
   - make page pretty
   - todo allow removal of items (it's probably all js side so whatevs)
   - add to top level menu so people can navigate
+  - top of cart - blob of text about how to pickup + timing
+  - rename cart.html -> order.html?
+  - order details / summary builds on this page too
 
-- allow the user to "checkout"
-- on success
+- on successful charge
   - send email
-- on fail
-  - just drop all state and let them go back
 
-- dine in only collect email
+- customer info on payment / order confirmation
+- order confirmation modal
+- robots.txt dont let goog scrape the flow
+
+- limit orders per day -
+- limit Pickup today v tomorrow by time?
