@@ -205,6 +205,19 @@ function addToCart(inventoryId) {
     });
 }
 
+function addTip() {
+    var tipAmountUnparsed = document.querySelector('#tip').value;
+    var tip = tipAmountUnparsed / 100;
+    return fetch(siteUrl + '/add-tip', {
+        headers: { "Content-Type": "application/json; charset=utf-8" },
+        method: 'POST',
+        body: JSON.stringify({
+            order_id: order_id,
+            tip_amount: tip_amount
+        })
+    }).then(response => response.json());
+}
+
 function addCustomerToOrder() {
     var orderId = getOrderId();
     var firstName = document.querySelector('#first_name').value;
