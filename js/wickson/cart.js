@@ -174,14 +174,18 @@ function setOrderId(orderId) {
     }
 }
 
-function calculateTotal(order_id) {
+function _calculateTotal(order_id) {
     return fetch(siteUrl + '/calculate-order-total', {
         headers: { "Content-Type": "application/json; charset=utf-8" },
         method: 'POST',
         body: JSON.stringify({
             order_id: order_id,
         })
-    }).then(response => response.json()).then(total => {
+    }).then(response => response.json());
+}
+
+function calculateTotal(order_id) {
+    _calculateTotal(order_id).then(total => {
         var totalNode = document.querySelector('#total');
         totalNode.innerHTML = "$" + currencyString(total.order_total);
     })
@@ -205,17 +209,20 @@ function addToCart(inventoryId) {
     });
 }
 
-function addTip() {
-    var tipAmountUnparsed = document.querySelector('#tip').value;
-    var tip = tipAmountUnparsed / 100;
-    return fetch(siteUrl + '/add-tip', {
-        headers: { "Content-Type": "application/json; charset=utf-8" },
-        method: 'POST',
-        body: JSON.stringify({
-            order_id: order_id,
-            tip_amount: tip_amount
+function addTip(pct) {
+    var orderId = getOrderId();
+    return _calculateTotal(orderId).then(total => {
+        var tip_amount = total.order_total * pct;  //technically this is tipping on tax too
+        fetch(siteUrl + '/add-tip', {
+            headers: {"Content-Type": "application/json; charset=utf-8"},
+            method: 'POST',
+            body: JSON.stringify({
+                order_id: orderId,
+                tip_amount: tip_amount
+            })
         })
-    }).then(response => response.json());
+            .then(_ => calculateTotal(orderId))
+    });
 }
 
 function addCustomerToOrder() {
