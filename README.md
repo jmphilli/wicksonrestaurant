@@ -16,6 +16,7 @@ __deploying__
 
 - allow the user to add items to a "cart"
   - tip - need place to add it (cart.html)
+    - tip - should be sent over as a % param and let server do it when advancing to customer.html
   - render order details somewhere
   - make page pretty
   - todo allow removal of items (it's probably all js side so whatevs)
