@@ -85,7 +85,9 @@ function buildHtmlOrderDetails(orderDetails) {
 `;
     orderDetails.lineItems.forEach(
         function (orderDetail) {
-            itemsString += renderOrderItem(orderDetail);
+            if (orderDetail['name'] !== 'tip') {
+                itemsString += renderOrderItem(orderDetail);
+            }
         }
     );
 
@@ -172,14 +174,18 @@ function setOrderId(orderId) {
     }
 }
 
-function calculateTotal(order_id) {
+function _calculateTotal(order_id) {
     return fetch(siteUrl + '/calculate-order-total', {
         headers: { "Content-Type": "application/json; charset=utf-8" },
         method: 'POST',
         body: JSON.stringify({
             order_id: order_id,
         })
-    }).then(response => response.json()).then(total => {
+    }).then(response => response.json());
+}
+
+function calculateTotal(order_id) {
+    _calculateTotal(order_id).then(total => {
         var totalNode = document.querySelector('#total');
         totalNode.innerHTML = "$" + currencyString(total.order_total);
     })
@@ -203,44 +209,63 @@ function addToCart(inventoryId) {
     });
 }
 
+function addTip(pct) {
+    var orderId = getOrderId();
+    return _calculateTotal(orderId).then(total => {
+        var tip_amount = total.order_total * pct;  //technically this is tipping on tax too
+        fetch(siteUrl + '/add-tip', {
+            headers: {"Content-Type": "application/json; charset=utf-8"},
+            method: 'POST',
+            body: JSON.stringify({
+                order_id: orderId,
+                tip_amount: tip_amount
+            })
+        })
+            .then(_ => calculateTotal(orderId))
+    });
+}
+
 function addCustomerToOrder() {
     var orderId = getOrderId();
     var firstName = document.querySelector('#first_name').value;
     var lastName = document.querySelector('#last_name').value;
+    var email = document.querySelector('#customer_email').value;
+    var phone = document.querySelector('#phone_number').value;
+    var note = document.querySelector('#note').value;
     if (!firstName || !lastName){
         alert('name not set');
         return;
     }
-    return fetch(siteUrl + '/add-customer-to-order', {
+    if (!email) {
+        alert('email required');
+        return;
+    }
+    if (!phone) {
+        alert('phone required');
+        return;
+    }
+    return fetch(siteUrl + '/add-customer', {
         headers: { "Content-Type": "application/json; charset=utf-8" },
         method: 'POST',
         body: JSON.stringify({
             order_id: orderId,
             first_name: firstName,
-            last_name: lastName
-        })
-    }).then(response => response.json())
-        .then(order_body => {
-            order_id = order_body.order_id;
-            setOrderId(order_id);
-    });
-}
-
-function addNoteToOrder() {
-    var orderId = getOrderId();
-    var note = document.querySelector('#note').value;
-    return fetch(siteUrl + '/add-note-to-order', {
-        headers: { "Content-Type": "application/json; charset=utf-8" },
-        method: 'POST',
-        body: JSON.stringify({
-            order_id: orderId,
+            last_name: lastName,
+            email: email,
+            phone: phone,
             note: note
         })
-    }).then(response => response.json())
-        .then(order_body => {
-            order_id = order_body.order_id;
-            setOrderId(order_id);
-    });
+    })
+        .then(
+            response => response.json()
+        )
+        .then(
+            order_body => {
+                order_id = order_body.order_id;
+                setOrderId(order_id);
+                window.location.href = siteUrl + '/checkout.html?order_id=' + orderId;
+            }
+            );
 }
 
 renderInventory();

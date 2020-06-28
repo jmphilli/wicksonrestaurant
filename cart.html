@@ -42,8 +42,14 @@
 		<h1>Drinks</h1>
 			<div id="drinks" class="row"></div>
 
+		<h3>Tip</h3>
+		<button onclick="addTip(.15);">15%</button>
+		<button onclick="addTip(.20);">20%</button>
+		<button onclick="addTip(.25);">25%</button>
+
 		<h3>Total (tax included)</h3>
 		<div id="total"></div>
+
 
 		<form action="/customer.html" method="get">
 			<input type="hidden" name="order_id" id="order-id-form"/>

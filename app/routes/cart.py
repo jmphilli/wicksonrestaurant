@@ -32,29 +32,36 @@ def add_line_item() -> Tuple[str, int]:
     return json.dumps({"order_id": order_id}), HTTP_200_OK
 
 
-@blueprint.route("/add-customer-to-order", methods=["POST"])
+@blueprint.route("/add-tip", methods=["POST"])
+def add_tip() -> Tuple[str, int]:
+    parsed_data = get_json()
+    order_id = cast(str, parsed_data.get("order_id"))
+    tip_amount = cast(int, parsed_data.get("tip_amount"))
+    default_order_core_service().add_tip(order_id=order_id, tip_amount=tip_amount)
+
+    return json.dumps({"order_id": order_id}), HTTP_200_OK
+
+
+@blueprint.route("/add-customer", methods=["POST"])
 def add_customer_to_order() -> Tuple[str, int]:
     parsed_data = get_json()
     order_id = parsed_data.get("order_id")
     first_name = parsed_data.get("first_name")
     last_name = parsed_data.get("last_name")
-    if not first_name or not last_name:
-        return json.dumps({"error": "need both names"}), HTTP_400_BAD_REQUEST
+    email = parsed_data.get("email")
+    note = parsed_data.get("note")
+    phone = parsed_data.get("phone")
+    if not first_name or not last_name or not email or not phone:
+        return json.dumps({"error": "required field missing"}), HTTP_400_BAD_REQUEST
     customer_id, order_id = default_order_core_service().add_customer_to_order(
-        order_id=order_id, first_name=first_name, last_name=last_name,
+        order_id=order_id,
+        first_name=first_name,
+        last_name=last_name,
+        email=email,
+        phone=phone,
+        note=note,
     )
     return json.dumps({"customer_id": customer_id, "order_id": order_id}), HTTP_200_OK
-
-
-@blueprint.route("/add-note-to-order", methods=["POST"])
-def add_note_to_order() -> Tuple[str, int]:
-    parsed_data = get_json()
-    order_id = parsed_data.get("order_id")
-    note = parsed_data.get("note")
-    if not note:
-        return json.dumps({"error": "need note"}), HTTP_400_BAD_REQUEST
-    order_id = default_order_core_service().add_note(order_id=order_id, note=note)
-    return json.dumps({"order_id": order_id}), HTTP_200_OK
 
 
 @blueprint.route("/calculate-order-total", methods=["POST"])
@@ -82,7 +89,8 @@ def charge_order() -> Tuple[str, int]:
     if not order_id or not payment_method_id:
         return json.dumps({"error": "order | payment missing"}), HTTP_400_BAD_REQUEST
     total = default_order_core_service().calculate_order_total(order_id)
-    # todo prevent double charge by checking order is not paid
+    if default_order_core_service().order_is_paid(order_id):
+        return json.dumps({"success": True, "order_id": order_id}), HTTP_200_OK
     try:
         intent = stripe.PaymentIntent.create(
             amount=total,
@@ -101,6 +109,7 @@ def charge_order() -> Tuple[str, int]:
             default_order_core_service().mark_order_as_paid(
                 order_id=order_id, stripe_reference=intent.id, total=total,
             )
+
             return json.dumps({"success": True, "order_id": order_id}), HTTP_200_OK
         # Any other status would be unexpected, so error
         return (
