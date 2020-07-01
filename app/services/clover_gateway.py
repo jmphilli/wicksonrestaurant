@@ -86,6 +86,9 @@ class CloverService:
         resp = self.clover_client.customer_service.create_customer(payload)
         return resp["id"]
 
+    def get_customer(self, customer_id: str) -> Dict[str, Any]:
+        return self.clover_client.customer_service.get_customer_by_id(customer_id)
+
     def add_customer_to_order(self, order_id: str, customer_id: str) -> None:
         payload = {"id": order_id, "customers": [{"id": customer_id}]}
         self.clover_client.order_service.update_order_by_id(payload)
