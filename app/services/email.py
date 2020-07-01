@@ -1,4 +1,5 @@
-from email.message import EmailMessage
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 from smtplib import SMTP_SSL
 from typing import Optional
 from urllib import request
@@ -29,13 +30,12 @@ class EmailService:
 
     def _create_email_body(
         self, customer_email_address: str, order_id: str,
-    ) -> EmailMessage:
-        msg = EmailMessage()
-        msg.set_content(self._get_receipt(order_id=order_id))
-
+    ) -> MIMEMultipart:
+        msg = MIMEMultipart("alternative")
         msg["Subject"] = f"Order {order_id} Receipt"
         msg["From"] = self.FROM_ADDRESS
         msg["To"] = customer_email_address
+        msg.attach(MIMEText(self._get_receipt(order_id=order_id), "html"))
         return msg
 
     def _get_receipt(self, order_id: str) -> str:
