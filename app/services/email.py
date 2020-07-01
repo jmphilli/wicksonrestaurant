@@ -1,9 +1,12 @@
 from email.message import EmailMessage
 from smtplib import SMTP_SSL
 from typing import Optional
+from urllib import request
 
 from app.settings import GMAIL_PASSWORD
 from app.settings import GMAIL_USER
+from app.settings import RECEIPT_URL_PREFIX
+
 
 DEFAULT_EMAIL_CLIENT: Optional[SMTP_SSL] = None
 
@@ -28,12 +31,20 @@ class EmailService:
         self, customer_email_address: str, order_id: str,
     ) -> EmailMessage:
         msg = EmailMessage()
-        msg.set_content("This is my message")
+        msg.set_content(self._get_receipt(order_id=order_id))
 
         msg["Subject"] = f"Order {order_id} Receipt"
         msg["From"] = self.FROM_ADDRESS
         msg["To"] = customer_email_address
         return msg
+
+    def _get_receipt(self, order_id: str) -> str:
+        fp = request.urlopen(RECEIPT_URL_PREFIX + order_id)
+        receipt_bytes = fp.read()
+
+        receipt = receipt_bytes.decode("utf8")
+        fp.close()
+        return receipt
 
     def send_email(self, customer_email_address: str, order_id: str) -> None:
         self.email_client.send_message(
