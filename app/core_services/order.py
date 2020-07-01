@@ -10,11 +10,18 @@ from app.constants import STRIPE_VARIABLE_COST
 from app.constants import TAX_RATE
 from app.services.clover_gateway import CloverService
 from app.services.clover_gateway import default_clover_service
+from app.services.email import default_email_service
+from app.services.email import EmailService
 
 
 class OrderCoreService:
-    def __init__(self, clover_service: Optional[CloverService] = None) -> None:
+    def __init__(
+        self,
+        clover_service: Optional[CloverService] = None,
+        email_service: Optional[EmailService] = None,
+    ) -> None:
         self.clover_service = clover_service or default_clover_service()
+        self.email_service = email_service or default_email_service()
 
     def _ensure_order_id(self, order_id: Optional[str]) -> str:
         if not order_id:
@@ -107,6 +114,25 @@ class OrderCoreService:
         if order.get("externalReferenceId"):
             return True
         return False
+
+    def send_email(self, order_id: str) -> None:
+        order = self.clover_service.get_order(order_id=order_id)
+
+        for customer_link in order.get("customers", {}).get("elements", []):
+            customer_id = customer_link.get("id")
+            customer = self.clover_service.get_customer(customer_id)
+            if customer.get("emailAddresses"):
+                customer_email_address = (
+                    customer.get("emailAddresses", {})
+                    .get("elements", [{}])[0]
+                    .get("emailAddress")
+                )
+                if customer_email_address:
+                    self.email_service.send_email(
+                        customer_email_address=customer_email_address,
+                        order_id=order_id,
+                    )
+                return
 
 
 _DEFAULT_ORDER_CORE_SERVICE: Optional[OrderCoreService] = None

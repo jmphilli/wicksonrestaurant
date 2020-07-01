@@ -109,7 +109,7 @@ def charge_order() -> Tuple[str, int]:
             default_order_core_service().mark_order_as_paid(
                 order_id=order_id, stripe_reference=intent.id, total=total,
             )
-
+            default_order_core_service().send_email(order_id=order_id)
             return json.dumps({"success": True, "order_id": order_id}), HTTP_200_OK
         # Any other status would be unexpected, so error
         return (
