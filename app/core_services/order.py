@@ -75,16 +75,16 @@ class OrderCoreService:
         total = 0
         tip_amount = 0
         tip = 0  # default when user doesn't tip
-        tip_percentage = 0.0
+        tip_percentage = 0
         for line_item in line_items:
             if line_item.get("name") == "tip":
                 if line_item["price"] > 0:
                     # it's custom
-                    tip_amount = line_item["price"]
+                    tip_amount = int(line_item["price"])
                 else:
                     tip_percentage = int(line_item["alternateName"])
             else:  # skip adding tip to total until the end
-                total += line_item["price"]
+                total += int(line_item["price"])
         if tip_amount:
             tip = tip_amount
         elif tip_percentage:
