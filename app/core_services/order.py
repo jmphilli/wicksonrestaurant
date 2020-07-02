@@ -57,6 +57,7 @@ class OrderCoreService:
             customer_dict = {
                 "first_name": customer.get("firstName"),
                 "last_name": customer.get("lastName"),
+                # todo phone
                 "email": customer.get("emailAddresses", {})
                 .get("elements", [{}])[0]
                 .get("emailAddress"),
