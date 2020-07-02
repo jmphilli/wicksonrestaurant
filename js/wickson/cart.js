@@ -209,16 +209,21 @@ function addToCart(inventoryId) {
     });
 }
 
-function addTip(pct) {
+function addTip(pct, isPercentage) {
     var orderId = getOrderId();
-    return _calculateTotal(orderId).then(total => {
-        var tip_amount = total.order_total * pct;  //technically this is tipping on tax too
+    var tip_amount = 0;
+    if (!isPercentage) {
+        var customAmount = document.querySelector('#custom-tip');
+        tip_amount = parseInt(parseFloat(customAmount.value, 0) * 100);
+    }
+    return _calculateTotal(orderId).then(_ => {
         fetch(siteUrl + '/add-tip', {
             headers: {"Content-Type": "application/json; charset=utf-8"},
             method: 'POST',
             body: JSON.stringify({
                 order_id: orderId,
-                tip_amount: tip_amount
+                tip_amount: tip_amount,
+                percentage: pct,
             })
         })
             .then(_ => calculateTotal(orderId))

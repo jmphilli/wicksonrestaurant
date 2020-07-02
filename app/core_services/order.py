@@ -55,8 +55,10 @@ class OrderCoreService:
         )
         return order_id
 
-    def add_tip(self, order_id: str, tip_amount: int) -> None:
-        self.clover_service.add_tip(order_id=order_id, tip_amount=tip_amount)
+    def add_tip(self, order_id: str, tip_amount: int, tip_percentage: int) -> None:
+        self.clover_service.add_tip(
+            order_id=order_id, tip_amount=tip_amount, tip_percentage=tip_percentage,
+        )
         return
 
     def _calculate_total_and_tax(

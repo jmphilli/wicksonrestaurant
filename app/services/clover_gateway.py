@@ -43,8 +43,12 @@ class CloverService:
             order_id, line_item=body,
         )
 
-    def add_tip(self, order_id: str, tip_amount: int) -> None:
-        body = {"price": tip_amount, "name": "tip"}
+    def add_tip(self, order_id: str, tip_amount: int, tip_percentage: int) -> None:
+        body = {
+            "price": tip_amount,
+            "name": "tip",
+            "alternateName": f"{tip_percentage}",
+        }
         self.clover_client.order_service.create_line_item(order_id, line_item=body)
 
     def get_line_items_for_order(self, order_id: str) -> List[Dict[str, Any]]:

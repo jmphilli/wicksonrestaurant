@@ -43,10 +43,12 @@
 			<div id="drinks" class="row"></div>
 
 		<h3>Tip</h3>
-		<button onclick="addTip(.15);">15%</button>
-		<button onclick="addTip(.20);">20%</button>
-		<button onclick="addTip(.25);">25%</button>
-
+		<button onclick="addTip(15, true);">15%</button>
+		<button onclick="addTip(20, true);">20%</button>
+		<button onclick="addTip(25, true);">25%</button>
+		<br/>
+		$<input id="custom-tip" type="number" min="0.01" step="0.01"/>
+		<button onclick="addTip(0, false);">Custom Amount</button>
 		<h3>Total (tax included)</h3>
 		<div id="total"></div>
 
@@ -58,14 +60,6 @@
 
 		<!-- hidden state -->
 		<div id="order_id" hidden></div>
-
-		<!-- payment form
-		<form id="payment-form">
-		  <div id="card-element"></div>
-		  <button id="card-button">Submit Payment</button>
-		  <p id="payment-result"></p>
-		</form>
-		-->
 
 	</div>
 	<!--================ Start Footer Area =================-->
