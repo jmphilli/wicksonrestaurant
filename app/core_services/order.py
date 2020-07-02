@@ -48,6 +48,21 @@ class OrderCoreService:
             self.clover_service.add_note_to_order(order_id, note)
         return customer_id, order_id
 
+    def get_customer_from_order(self, order_id: str) -> Dict[str, Any]:
+        order = self.clover_service.get_order(order_id=order_id)
+        customer_id = order.get("customers", {}).get("elements", [])[0].get("id")
+        customer_dict = {}
+        if customer_id:
+            customer = self.clover_service.get_customer(customer_id=customer_id)
+            customer_dict = {
+                "first_name": customer.get("firstName"),
+                "last_name": customer.get("lastName"),
+                "email": customer.get("emailAddresses", {})
+                .get("elements", [{}])[0]
+                .get("emailAddress"),
+            }
+        return customer_dict
+
     def add_line_item(self, inventory_item_id: str, order_id: Optional[str]) -> str:
         order_id = self._ensure_order_id(order_id=order_id)
         self.clover_service.add_line_item(
@@ -139,23 +154,13 @@ class OrderCoreService:
         return False
 
     def send_email(self, order_id: str) -> None:
-        order = self.clover_service.get_order(order_id=order_id)
-
-        for customer_link in order.get("customers", {}).get("elements", []):
-            customer_id = customer_link.get("id")
-            customer = self.clover_service.get_customer(customer_id)
-            if customer.get("emailAddresses"):
-                customer_email_address = (
-                    customer.get("emailAddresses", {})
-                    .get("elements", [{}])[0]
-                    .get("emailAddress")
-                )
-                if customer_email_address:
-                    self.email_service.send_email(
-                        customer_email_address=customer_email_address,
-                        order_id=order_id,
-                    )
-                return
+        customer = self.get_customer_from_order(order_id=order_id)
+        customer_email_address = customer.get("email")
+        if customer_email_address:
+            self.email_service.send_email(
+                customer_email_address=customer_email_address, order_id=order_id,
+            )
+        return
 
 
 _DEFAULT_ORDER_CORE_SERVICE: Optional[OrderCoreService] = None
