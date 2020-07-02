@@ -56,8 +56,16 @@ class OrderCoreService:
         return order_id
 
     def add_tip(self, order_id: str, tip_amount: int, tip_percentage: int) -> None:
+        line_items = self.clover_service.get_line_items_for_order(order_id=order_id)
+        existing_line_item_id = None
+        for line_item in line_items:
+            if line_item.get("name") == "tip":
+                existing_line_item_id = line_item.get("id")
         self.clover_service.add_tip(
-            order_id=order_id, tip_amount=tip_amount, tip_percentage=tip_percentage,
+            order_id=order_id,
+            tip_amount=tip_amount,
+            tip_percentage=tip_percentage,
+            existing_line_item_id=existing_line_item_id,
         )
         return
 
