@@ -1,0 +1,5 @@
+# Disallow everyone from going into the order flow
+User-agent: *
+Disallow: /cart.html
+Disallow: /checkout.html
+Disallow: /customer.html
