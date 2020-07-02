@@ -73,16 +73,29 @@ class OrderCoreService:
         self, line_items: List[Dict[str, Any]],
     ) -> Tuple[int, int, int]:
         total = 0
-        tip = 0
+        tip_amount = 0
+        tip = 0  # default when user doesn't tip
+        tip_percentage = 0.0
         for line_item in line_items:
             if line_item.get("name") == "tip":
-                tip = line_item["price"]
-            total += line_item["price"]
+                if line_item["price"] > 0:
+                    # it's custom
+                    tip_amount = line_item["price"]
+                else:
+                    tip_percentage = int(line_item["alternateName"])
+            else:  # skip adding tip to total until the end
+                total += line_item["price"]
+        if tip_amount:
+            tip = tip_amount
+        elif tip_percentage:
+            tip = math.ceil(total * (tip_percentage / 100))
         total += STRIPE_FIXED_COST
         tax = self._calculate_tax(running_total=total)  # no tip?
         total += tax
         # last one
         total += math.ceil(STRIPE_VARIABLE_COST * total)
+        # add tip - not subject to tax because not a service charge or anything like that
+        total += tip
         return total, tip, tax
 
     def _calculate_tax(self, running_total: float) -> int:

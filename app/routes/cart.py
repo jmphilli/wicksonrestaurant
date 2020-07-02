@@ -71,7 +71,6 @@ def add_customer_to_order() -> Tuple[str, int]:
 
 @blueprint.route("/calculate-order-total", methods=["POST"])
 def calculate_order_total() -> Tuple[str, int]:
-    # todo calculate tip
     parsed_data = get_json()
     order_id = cast(str, parsed_data.get("order_id"))
     total = default_order_core_service().calculate_order_total(order_id)

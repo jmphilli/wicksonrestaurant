@@ -217,6 +217,7 @@ function addTip(pct, isPercentage) {
         tip_amount = parseInt(parseFloat(customAmount.value, 0) * 100);
     }
     return _calculateTotal(orderId).then(_ => {
+        // TODO user feedback that it worked
         fetch(siteUrl + '/add-tip', {
             headers: {"Content-Type": "application/json; charset=utf-8"},
             method: 'POST',
