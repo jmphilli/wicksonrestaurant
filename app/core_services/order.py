@@ -76,16 +76,6 @@ class OrderCoreService:
         tip_amount = 0
         tip = 0  # default when user doesn't tip
         tip_percentage = 0
-        """
-from app.core_services.order import default_order_core_service
-o = default_order_core_service()
-from app.services.clover_gateway import default_clover_service
-cs = default_clover_service()
-order_id = '850VSSQ1FNY2R'
-lis = cs.get_line_items_for_order(order_id=order_id)
-o._calculate_total_and_tax(lis)
-
-        """
         for line_item in line_items:
             if line_item.get("name") == "tip":
                 if line_item["price"] > 0:
