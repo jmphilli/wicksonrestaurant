@@ -2,6 +2,10 @@
 var siteUrl = 'http://wicksonrestaurant.com:8080';  // staging
 // var siteUrl = 'https://wicksonrestaurant.com';  // prod
 
+const SNACK_CATEGORY = 'extras';
+const ENTREE_CATEGORY = 'quesadillas';
+const DRINK_CATEGORY = 'soup';
+
 function currencyString(rawAmount) {
     return (rawAmount / 100).toFixed(2)
 }
@@ -41,8 +45,10 @@ function getOrderDetails() {
 
 function createInventoryHtml(inventoryItem) {
     return `<div class="m-0 col-lg-6 col-sm-6">${inventoryItem.name} -- \$ ${inventoryItem.price}
-<button onclick="addToCart('${inventoryItem.id}')">+</button></div>
-<button onclick="removeFromCart('${inventoryItem.id}')">-</button></div>`;
+<button onclick="addToCart('${inventoryItem.id}')">+</button>
+<button onclick="removeFromCart('${inventoryItem.id}')">-</button>
+<div id="${inventoryItem.id}"></div>
+</div>`;
 }
 
 function buildHtmlInventory(inventory) {
@@ -51,11 +57,11 @@ function buildHtmlInventory(inventory) {
     var drinkString = '';
     inventory.forEach(function (inventoryItem) {
         if (inventoryItem.category != null && inventoryItem.category !== undefined) {
-            if (inventoryItem.category.toLowerCase() == 'extras') {
+            if (inventoryItem.category.toLowerCase() == SNACK_CATEGORY) {
                 snackString += createInventoryHtml(inventoryItem);
-            } else if (inventoryItem.category.toLowerCase() == 'quesadillas') {
+            } else if (inventoryItem.category.toLowerCase() == ENTREE_CATEGORY) {
                 entreeString += createInventoryHtml(inventoryItem);
-            } else if (inventoryItem.category.toLowerCase() == 'soup') {
+            } else if (inventoryItem.category.toLowerCase() == DRINK_CATEGORY) {
                 drinkString += createInventoryHtml(inventoryItem);
             }
         }
@@ -196,7 +202,23 @@ function addToCart(inventoryId) {
 }
 
 function buildCartOrderDetails(orderDetails) {
-
+    // set total
+    var totalNode = document.querySelector('#total');
+    totalNode.innerHTML = orderDetails.totalCost;
+    // set quantity for each line item
+    var quantityById = {};
+    orderDetails.lineItems.forEach(
+        function(lineItem) {
+            if (!quantityById[lineItem.item_id]) {
+                quantityById[lineItem.item_id] = 0
+            }
+            quantityById[lineItem.item_id] += 1
+        }
+    );
+    for (var lineItemInventoryItemId in quantityById) {
+        var lineItemQuantityNode = document.querySelector('#' + lineItemInventoryItemId);
+        lineItemQuantityNode.innerHTML = quantityById[lineItemInventoryItemId];
+    }
 }
 
 function removeFromCart(inventoryId) {
