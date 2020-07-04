@@ -23,7 +23,7 @@ function getCustomer() {
                 var firstName = customer.first_name;
                 var lastName = customer.last_name;
                 var email = customer.email;
-                var phone = 'todo';
+                var phone = customer.phone;
                 setCustomerDetails(firstName, lastName, email, phone);
             }
             );

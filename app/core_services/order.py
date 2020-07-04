@@ -54,13 +54,21 @@ class OrderCoreService:
         customer_dict = {}
         if customer_id:
             customer = self.clover_service.get_customer(customer_id=customer_id)
+            email = (
+                customer.get("emailAddresses", {})
+                .get("elements", [{}])[0]
+                .get("emailAddress")
+            )
+            phone = (
+                customer.get("phoneNumbers", {})
+                .get("elements", [{}])[0]
+                .get("phoneNumber")
+            )
             customer_dict = {
                 "first_name": customer.get("firstName"),
                 "last_name": customer.get("lastName"),
-                # todo phone
-                "email": customer.get("emailAddresses", {})
-                .get("elements", [{}])[0]
-                .get("emailAddress"),
+                "email": email,
+                "phone": phone,
             }
         return customer_dict
 
