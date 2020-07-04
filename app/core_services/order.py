@@ -87,7 +87,7 @@ class OrderCoreService:
 
     def _calculate_total_and_tax(
         self, line_items: List[Dict[str, Any]],
-    ) -> Tuple[int, int, int]:
+    ) -> Tuple[int, int, int, int]:
         total = 0
         tip_amount = 0
         tip = 0  # default when user doesn't tip
@@ -106,13 +106,16 @@ class OrderCoreService:
         elif tip_percentage:
             tip = math.ceil(total * (tip_percentage / 100))
         total += STRIPE_FIXED_COST
+        service_charge = STRIPE_FIXED_COST
         tax = self._calculate_tax(running_total=total)  # no tip?
         total += tax
         # last one
-        total += math.ceil(STRIPE_VARIABLE_COST * total)
+        stripe_variable_cost = math.ceil(STRIPE_VARIABLE_COST * total)
+        total += stripe_variable_cost
+        service_charge += stripe_variable_cost
         # add tip - not subject to tax because not a service charge or anything like that
         total += tip
-        return total, tip, tax
+        return total, tip, tax, service_charge
 
     def _calculate_tax(self, running_total: float) -> int:
         return math.ceil(running_total * TAX_RATE)
@@ -123,7 +126,7 @@ class OrderCoreService:
 
     def get_order_details(self, order_id: str) -> Dict[str, Any]:
         line_items = self.clover_service.get_line_items_for_order(order_id=order_id)
-        total_cost, tip, tax = self._calculate_total_and_tax(line_items)
+        total_cost, tip, tax, service_charge = self._calculate_total_and_tax(line_items)
         parsed_line_items = []
         for line_item in line_items:
             parsed_line_items.append(
@@ -139,6 +142,7 @@ class OrderCoreService:
             "total_cost": total_cost,
             "tax": tax,
             "tip": tip,
+            "service_charge": service_charge,
         }
 
     def mark_order_as_paid(
