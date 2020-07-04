@@ -40,10 +40,9 @@ function getOrderDetails() {
 }
 
 function createInventoryHtml(inventoryItem) {
-    // pretty
-    // minus
-    // counter
-    return `<div class="m-0 col-lg-6 col-sm-6">${inventoryItem.name} -- \$ ${inventoryItem.price}<button onclick="addToCart('${inventoryItem.id}')">Add</button></div>`;
+    return `<div class="m-0 col-lg-6 col-sm-6">${inventoryItem.name} -- \$ ${inventoryItem.price}
+<button onclick="addToCart('${inventoryItem.id}')">+</button></div>
+<button onclick="removeFromCart('${inventoryItem.id}')">-</button></div>`;
 }
 
 function buildHtmlInventory(inventory) {
@@ -207,6 +206,23 @@ function addToCart(inventoryId) {
     }).then(response => response.json())
         .then(order_body => {
             //todo - if we want state, per browser, between tabs, i can probably use local storage.
+            order_id = order_body.order_id;
+            setOrderId(order_id);
+            calculateTotal(order_id);
+    });
+}
+
+function removeFromCart(inventoryId) {
+    var orderId = getOrderId();
+    return fetch(siteUrl + '/remove-line-item', {
+        headers: { "Content-Type": "application/json; charset=utf-8" },
+        method: 'POST',
+        body: JSON.stringify({
+            inventory_item_id: inventoryId,
+            order_id: orderId,
+        })
+    }).then(response => response.json())
+        .then(order_body => {
             order_id = order_body.order_id;
             setOrderId(order_id);
             calculateTotal(order_id);

@@ -43,6 +43,12 @@ class CloverService:
             order_id, line_item=body,
         )
 
+    def remove_line_item(self, order_id: str, line_item_id: str) -> None:
+        body = {"lineItem": {"id": line_item_id}}
+        self.clover_client.order_service.void_line_item(
+            order_id=order_id, voided_line_item=body,
+        )
+
     def add_tip(
         self,
         order_id: str,
