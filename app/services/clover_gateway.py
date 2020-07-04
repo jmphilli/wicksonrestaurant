@@ -109,7 +109,7 @@ class CloverService:
 
     def get_customer(self, customer_id: str) -> Dict[str, Any]:
         return self.clover_client.customer_service.get_customer_by_id(
-            customer_id, include_email=True,
+            customer_id, include_emails=True, include_phones=True,
         )
 
     def add_customer_to_order(self, order_id: str, customer_id: str) -> None:
