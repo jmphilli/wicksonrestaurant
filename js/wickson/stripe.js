@@ -51,7 +51,7 @@ function handleServerResponse(responseJson) {
     // An error happened when charging the card, show it in the payment form
     resultContainer.textContent = responseJson.error;
   } else {
-    // Show a success message
-    resultContainer.textContent = 'Your order has been processed. Your order id is ' + responseJson['order_id'];
+      var orderId = responseJson['order_id'];
+      window.location.href = siteUrl + '/order_confirmation.html?order_id=' + orderId;
   }
 }
