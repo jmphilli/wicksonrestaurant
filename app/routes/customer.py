@@ -3,6 +3,7 @@ from typing import cast
 from typing import Tuple
 
 from flask import Blueprint
+from flask import request
 
 from app.constants import HTTP_200_OK
 from app.constants import HTTP_400_BAD_REQUEST
@@ -36,8 +37,7 @@ def add_customer_to_order() -> Tuple[str, int]:
 
 @blueprint.route("/customer", methods=["GET"])
 def get_customer_from_order() -> Tuple[str, int]:
-    parsed_data = get_json()
-    order_id = parsed_data.get("order_id")
+    order_id = request.args.get("order_id")
     if not order_id:
         return "{}", HTTP_400_BAD_REQUEST
     order_id = cast(str, order_id)
