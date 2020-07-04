@@ -32,6 +32,18 @@ def add_line_item() -> Tuple[str, int]:
     return json.dumps({"order_id": order_id}), HTTP_200_OK
 
 
+@blueprint.route("/remove-line-item", methods=["POST"])
+def remove_line_item() -> Tuple[str, int]:
+    parsed_data = get_json()
+    order_id = parsed_data.get("order_id")
+    inventory_item_id = cast(str, parsed_data.get("inventory_item_id"))
+    order_id = default_order_core_service().remove_line_item(
+        order_id=order_id, inventory_item_id=inventory_item_id,
+    )
+
+    return json.dumps({"order_id": order_id}), HTTP_200_OK
+
+
 @blueprint.route("/add-tip", methods=["POST"])
 def add_tip() -> Tuple[str, int]:
     parsed_data = get_json()

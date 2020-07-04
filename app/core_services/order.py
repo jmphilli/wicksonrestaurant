@@ -71,6 +71,24 @@ class OrderCoreService:
         )
         return order_id
 
+    def remove_line_item(self, inventory_item_id: str, order_id: Optional[str]) -> str:
+        order_id = self._ensure_order_id(order_id=order_id)
+        order_details = self.get_order_details(order_id=order_id)
+        line_items = order_details["line_items"]
+        if not line_items:
+            return order_id
+        line_item_id = ""
+        for line_item in line_items:
+            if line_item["item_id"] == inventory_item_id:
+                line_item_id = line_item["id"]
+                break
+        if not line_item_id:
+            return order_id
+        self.clover_service.remove_line_item(
+            order_id=order_id, line_item_id=line_item_id,
+        )
+        return order_id
+
     def add_tip(self, order_id: str, tip_amount: int, tip_percentage: int) -> None:
         line_items = self.clover_service.get_line_items_for_order(order_id=order_id)
         existing_line_item_id = None
