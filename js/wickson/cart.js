@@ -177,23 +177,6 @@ function setOrderId(orderId) {
     }
 }
 
-function _calculateTotal(order_id) {
-    return fetch(siteUrl + '/calculate-order-total', {
-        headers: { "Content-Type": "application/json; charset=utf-8" },
-        method: 'POST',
-        body: JSON.stringify({
-            order_id: order_id,
-        })
-    }).then(response => response.json());
-}
-
-function calculateTotal(order_id) {
-    _calculateTotal(order_id).then(total => {
-        var totalNode = document.querySelector('#total');
-        totalNode.innerHTML = "$" + currencyString(total.order_total);
-    })
-}
-
 function addToCart(inventoryId) {
     var orderId = getOrderId();
     return fetch(siteUrl + '/add-line-item', {
@@ -208,8 +191,12 @@ function addToCart(inventoryId) {
             //todo - if we want state, per browser, between tabs, i can probably use local storage.
             order_id = order_body.order_id;
             setOrderId(order_id);
-            calculateTotal(order_id);
+            getOrderDetails(order_id).then(orderDetails => buildCartOrderDetails(orderDetails));
     });
+}
+
+function buildCartOrderDetails(orderDetails) {
+
 }
 
 function removeFromCart(inventoryId) {
@@ -225,7 +212,7 @@ function removeFromCart(inventoryId) {
         .then(order_body => {
             order_id = order_body.order_id;
             setOrderId(order_id);
-            calculateTotal(order_id);
+            getOrderDetails(order_id).then(orderDetails => buildCartOrderDetails(orderDetails));
     });
 }
 
@@ -236,9 +223,7 @@ function addTip(pct, isPercentage) {
         var customAmount = document.querySelector('#custom-tip');
         tip_amount = parseInt(parseFloat(customAmount.value, 0) * 100);
     }
-    return _calculateTotal(orderId).then(_ => {
-        // TODO user feedback that it worked
-        fetch(siteUrl + '/add-tip', {
+    return fetch(siteUrl + '/add-tip', {
             headers: {"Content-Type": "application/json; charset=utf-8"},
             method: 'POST',
             body: JSON.stringify({
@@ -247,8 +232,7 @@ function addTip(pct, isPercentage) {
                 percentage: pct,
             })
         })
-            .then(_ => calculateTotal(orderId))
-    });
+        .then(_ => getOrderDetails(order_id).then(orderDetails => buildCartOrderDetails(orderDetails)));
 }
 
 function addCustomerToOrder() {
