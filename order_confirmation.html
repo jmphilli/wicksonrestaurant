@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="shortcut icon" href="img/fav.png">
+	<meta charset="UTF-8">
+	<title>Wickson Restaurant</title>
+    <!-- fonts -->
+	<link href="https://fonts.googleapis.com/css?family=EB+Garamond&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i|Roboto:400,500" rel="stylesheet">
+	<!--CSS-->
+	<link rel="stylesheet" href="css/linearicons.css">
+	<link rel="stylesheet" href="css/font-awesome.min.css">
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<link rel="stylesheet" href="css/main.css">
+    <!-- stripe -->
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+
+<body>
+
+	<!--================ Start Header Area =================-->
+	<header class="header-area">
+		<div class="container">
+			<div class="header-wrap">
+				<div class="header-top">
+					<div class="col menu-left">
+						<a href="index.html">home</a>
+						<a href="about.html">about</a>
+						<a href="menu.html">menu</a>
+						<a href="cart.html" class="active">order</a>
+						<a href="hours.html">hours</a>
+						<a href="contact.html">contact</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</header>
+	<!--================ End Header Area =================-->
+    <div class="main-content">
+		<div class="menu-contents">
+        <h1>Your order is confirmed</h1>
+        </div>
+    </div>
+	<div class="main-content">
+        <h2>Order Summary</h2>
+        <div id="order-details"></div>
+		<div id="item-breakdown"></div>
+		<div id="price-breakdown"></div>
+		<h2>Customer Summary</h2>
+		<div id="customer-details">
+			<h3>First Name:</h3>
+			<div id="customer-first">
+			</div>
+			<h3>Last Name:</h3>
+			<div id="customer-last"></div>
+			<h3>Email:</h3>
+			<div id="customer-email"></div>
+			<h3>Phone:</h3>
+			<div id="customer-phone"></div>
+		</div>
+        <!-- hidden state -->
+		<div id="order_id" hidden></div>
+	</div>
+
+	<!--================ Start Footer Area =================-->
+	<footer class="footer-area section-gap">
+    <div class="footer-bottom">
+        <p class="footer-text-large footer-text">
+            Opening Soon!
+        </p>
+        <p class="footer-text">
+            Contact:
+        </p>
+        <p class="footer-text">
+            <a href="tel:707-895-2955">
+                707-895-2955
+            </a>
+        </p>
+        <p class="footer-text">
+            <a href="https://www.google.com/maps/place/9000+CA-128,+Philo,+CA+95466/@39.0595109,-123.437016,17z">
+                9000 Highway 128, Philo, CA. 95466
+            </a>
+        </p>
+        <p class="footer-text">
+            <a href="mailto:wicksonrestaurant@gmail.com">wicksonrestaurant@gmail.com</a>
+        </p>
+        <p class="footer-text"></p>
+        <p class="footer-text">
+            <a target="_blank" href="https://www.instagram.com/wicksonrestaurant/"><i class="fa fa-instagram"></i></a>
+            <span class="p-1"></span>
+            <a target="_blank" href="https://www.facebook.com/WicksonAV/"><i class="fa fa-facebook"></i></a>
+        </p>
+        <p class="footer-text"></p>
+        <p class="footer-text row height"></p>
+    </div>
+</footer>
+	<!--================ End Footer Area =================-->
+
+	<script src="js/vendor/jquery-2.2.4.min.js"></script>
+	<script src="js/vendor/bootstrap.min.js"></script>
+	<script src="js/owl.carousel.min.js"></script>
+	<script src="js/jquery.sticky.js"></script>
+	<script src="js/parallax.min.js"></script>
+	<script src="js/jquery.nice-select.min.js"></script>
+	<script src="js/jquery.ajaxchimp.min.js"></script>
+	<script src="js/jquery.magnific-popup.min.js"></script>
+	<script src="js/main.js"></script>
+    <script src="js/wickson/cart.js"></script>
+    <script src="js/wickson/customer.js"></script>
+	<script src="js/wickson/stripe.js"></script>
+</body>
+
+</html>

@@ -162,9 +162,11 @@ function renderOrderDetails() {
 
 function getOrderId() {
     var node = document.querySelector('#order_id');
-    var order_id = node.innerHTML;
-    if (order_id != null && order_id !== undefined && order_id !== "") {
-        return order_id;
+    if (node != null && node !== undefined) {
+        var order_id = node.innerHTML;
+        if (order_id != null && order_id !== undefined && order_id !== "") {
+            return order_id;
+        }
     }
     var urlParams = new URLSearchParams(window.location.search);
     order_id = urlParams.get('order_id');
