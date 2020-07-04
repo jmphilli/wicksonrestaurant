@@ -24,8 +24,6 @@ form.addEventListener('submit', function(event) {
   }).then(handlePaymentMethodResult);
 });
 
-// This function requires "getOrderId" from cart.js
-// Currently i'm just stuffing both of these bits on the same page, in the future we may want a separate cart + checkout page
 function handlePaymentMethodResult(result) {
   if (result.error) {
     // An error happened when collecting card details, show it in the payment form
@@ -47,6 +45,7 @@ function handlePaymentMethodResult(result) {
   }
 }
 
+// Redirect to confirmation page
 function handleServerResponse(responseJson) {
   if (responseJson.error) {
     // An error happened when charging the card, show it in the payment form
