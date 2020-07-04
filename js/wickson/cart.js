@@ -80,6 +80,8 @@ function buildHtmlOrderDetails(orderDetails) {
 <div class="m-0 col-lg-6 col-sm-6">${orderDetails['tip']}</div>
 <h2>Tax</h2>
 <div class="m-0 col-lg-6 col-sm-6">${orderDetails['tax']}</div>
+<h2>Service Charge</h2>
+<div class="m-0 col-lg-6 col-sm-6">${orderDetails['serviceCharge']}</div>
 <h2>Total</h2>
 <div class="m-0 col-lg-6 col-sm-6">${orderDetails['totalCost']}</div>
 `;
@@ -106,13 +108,15 @@ function parseDetails(orderDetails) {
     var totalCost = currencyString(orderDetails['total_cost']);
     var tax = currencyString(orderDetails['tax']);
     var tip = currencyString(orderDetails['tip']);
+    var serviceCharge = currencyString(orderDetails['service_charge']);
     var lineItems = orderDetails['line_items']; // probably mash together total quantity
 
     return {
-        totalCost: '$' + totalCost,
+        lineItems: lineItems,
+        serviceCharge: '$' + serviceCharge,
         tax: '$' + tax,
         tip: '$' + tip,
-        lineItems: lineItems
+        totalCost: '$' + totalCost
     }
 }
 
