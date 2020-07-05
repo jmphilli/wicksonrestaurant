@@ -186,10 +186,13 @@ class OrderCoreService:
 
     def send_email(self, order_id: str) -> None:
         customer = self.get_customer_from_order(order_id=order_id)
+        order_details = self.get_order_details(order_id=order_id)
         customer_email_address = customer.get("email")
         if customer_email_address:
             self.email_service.send_email(
-                customer_email_address=customer_email_address, order_id=order_id,
+                customer_email_address=customer_email_address,
+                order_id=order_id,
+                order_details=order_details,
             )
         return
 
