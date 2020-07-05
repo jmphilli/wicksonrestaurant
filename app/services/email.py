@@ -9,25 +9,16 @@ from app.settings import GMAIL_USER
 from app.settings import RECEIPT_URL_PREFIX
 
 
-DEFAULT_EMAIL_CLIENT: Optional[SMTP_SSL] = None
-
-
-def _default_email_client() -> SMTP_SSL:
-    global DEFAULT_EMAIL_CLIENT
-    if not DEFAULT_EMAIL_CLIENT:
-        DEFAULT_EMAIL_CLIENT = SMTP_SSL("smtp.gmail.com", 465)
-    return DEFAULT_EMAIL_CLIENT
+def default_email_client() -> SMTP_SSL:
+    return SMTP_SSL("smtp.gmail.com", 465)
 
 
 class EmailService:
 
     FROM_ADDRESS = "orders@wicksonrestaurant.com"
 
-    def __init__(self, email_client: Optional[SMTP_SSL] = None) -> None:
-        return
-
     def _init_email(self) -> None:
-        self.email_client = _default_email_client()
+        self.email_client = default_email_client()
         self.email_client.login(GMAIL_USER, GMAIL_PASSWORD)
 
     def _create_email_body(
