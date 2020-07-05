@@ -93,6 +93,7 @@ function buildHtmlOrderDetails(orderDetails) {
     orderDetails.lineItems.forEach(
         function (orderDetail) {
             if (orderDetail['name'] !== 'tip') {
+                // todo aggregate by inventory id
                 itemsString += renderOrderItem(orderDetail);
             }
         }
