@@ -74,8 +74,8 @@ function buildHtmlInventory(inventory) {
 }
 
 function renderOrderItem(orderItem) {
-    var priceString = '$' + currencyString(orderItem['price']);
-    return `<div class="m-0 col-lg-6 col-sm-6">${orderItem['name']}</div><div class="m-0 col-lg-6 col-sm-6">${priceString}</div>`;
+    var priceString = '$' + currencyString(orderItem.price);
+    return `<div class="m-0 col-lg-6 col-sm-6">${orderItem.name} x ${orderItem.quantity}</div><div class="m-0 col-lg-6 col-sm-6">${priceString}</div>`;
 }
 
 function buildHtmlOrderDetails(orderDetails) {
@@ -90,14 +90,28 @@ function buildHtmlOrderDetails(orderDetails) {
 <h2>Total</h2>
 <div class="m-0 col-lg-6 col-sm-6">${orderDetails['totalCost']}</div>
 `;
+    var aggregatedLineItems = {};
     orderDetails.lineItems.forEach(
         function (orderDetail) {
             if (orderDetail['name'] !== 'tip') {
-                // todo aggregate by inventory id
-                itemsString += renderOrderItem(orderDetail);
+                var item_id = orderDetail['item_id'];
+                if(!aggregatedLineItems[item_id]) {
+                    aggregatedLineItems[item_id] = {
+                        name: orderDetail['name'],
+                        quantity: 0,
+                        price: 0
+                    }
+                }
+                aggregatedLineItems[item_id].price += orderDetail['price'];
+                aggregatedLineItems[item_id].quantity += 1;
             }
         }
     );
+
+    for (const property in aggregatedLineItems) {
+        var orderDetail = aggregatedLineItems[property];
+        itemsString += renderOrderItem(orderDetail);
+    }
 
     return {
         itemBreakdown: itemsString,
