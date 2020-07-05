@@ -36,26 +36,37 @@ class EmailService:
         )
         return msg
 
+    def _currency_string(self, val: int) -> str:
+        major_units = val / 100
+        return f"${major_units:.2f}"
+
     def _get_receipt(self, order_id: str, order_details: Dict[str, Any]) -> str:
-        tax_str = "$" + str(order_details["tax"])
-        total_str = "$" + str(order_details["total"])
-        service_str = "$" + str(order_details["service_charge"])
+        tax_str = self._currency_string(order_details["tax"])
+        total_str = self._currency_string(order_details["total_cost"])
+        service_str = self._currency_string(order_details["service_charge"])
         tip_str = ""
         if order_details["tip"] != 0:
-            tip_str = f"<h2> Tip </h2> {order_details['tip']}"
+            formatted_tip = self._currency_string(order_details["tip"])
+            tip_str = f"<h2> Tip </h2> {formatted_tip}"
         line_items = ""
         line_item_aggregation: Dict[str, Any] = {}
         for li in order_details["line_items"]:
+            item_id = li["item_id"]
+            if li["name"] == "tip":
+                continue
             if not line_item_aggregation.get(li["item_id"]):
-                line_item_aggregation["item_id"] = {
+                line_item_aggregation[item_id] = {
                     "name": li["name"],
                     "price": 0,
                     "quantity": 0,
                 }
-            line_item_aggregation["item_id"]["price"] += li["price"]
-            line_item_aggregation["item_id"]["quantity"] += 1
+            line_item_aggregation[item_id]["price"] += li["price"]
+            line_item_aggregation[item_id]["quantity"] += 1
         for _, values in line_item_aggregation.items():
-            line_items += f"<div>{values['name']} x {values['quantity']} : {values['price']}</div>"
+            price_str = self._currency_string(values["price"])
+            line_items += (
+                f"<div>{values['name']} x {values['quantity']} : {price_str}</div>"
+            )
         receipt = """
         <html>
         <body>
