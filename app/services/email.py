@@ -24,9 +24,11 @@ class EmailService:
     FROM_ADDRESS = "orders@wicksonrestaurant.com"
 
     def __init__(self, email_client: Optional[SMTP_SSL] = None) -> None:
-        self.email_client = email_client or _default_email_client()
-        self.email_client.login(GMAIL_USER, GMAIL_PASSWORD)
         return
+
+    def _init_email(self) -> None:
+        self.email_client = _default_email_client()
+        self.email_client.login(GMAIL_USER, GMAIL_PASSWORD)
 
     def _create_email_body(
         self, customer_email_address: str, order_id: str,
@@ -47,6 +49,7 @@ class EmailService:
         return receipt
 
     def send_email(self, customer_email_address: str, order_id: str) -> None:
+        self._init_email()
         self.email_client.send_message(
             self._create_email_body(
                 customer_email_address=customer_email_address, order_id=order_id,

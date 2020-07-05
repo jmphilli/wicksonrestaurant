@@ -1,4 +1,5 @@
 import json
+import smtplib
 from typing import cast
 from typing import Tuple
 
@@ -85,6 +86,7 @@ def charge_order() -> Tuple[str, int]:
         return json.dumps({"error": "order | payment missing"}), HTTP_400_BAD_REQUEST
     total = default_order_core_service().calculate_order_total(order_id)
     if default_order_core_service().order_is_paid(order_id):
+        default_order_core_service().send_email(order_id=order_id)
         return json.dumps({"success": True, "order_id": order_id}), HTTP_200_OK
     try:
         intent = stripe.PaymentIntent.create(
@@ -104,7 +106,6 @@ def charge_order() -> Tuple[str, int]:
             default_order_core_service().mark_order_as_paid(
                 order_id=order_id, stripe_reference=intent.id, total=total,
             )
-            default_order_core_service().send_email(order_id=order_id)
             return json.dumps({"success": True, "order_id": order_id}), HTTP_200_OK
         # Any other status would be unexpected, so error
         return (
@@ -114,3 +115,5 @@ def charge_order() -> Tuple[str, int]:
     except stripe.error.CardError as e:
         # Display error on client
         return json.dumps({"error": e.user_message}), HTTP_200_OK
+    except smtplib.SMTPSenderRefused:
+        return json.dumps({"error": "please try again"}), HTTP_200_OK

@@ -47,7 +47,7 @@ function createInventoryHtml(inventoryItem) {
     return `<div class="m-0 col-lg-6 col-sm-6">${inventoryItem.name} -- \$ ${inventoryItem.price}
 <button onclick="addToCart('${inventoryItem.id}')">+</button>
 <button onclick="removeFromCart('${inventoryItem.id}')">-</button>
-<div id="${inventoryItem.id}"></div>
+<div id="item-${inventoryItem.id}"></div>
 </div>`;
 }
 
@@ -207,6 +207,11 @@ function buildCartOrderDetails(orderDetails) {
     // set total
     var totalNode = document.querySelector('#total');
     totalNode.innerHTML = orderDetails.totalCost;
+    // set tip
+    if(orderDetails.tip != '$0.00') {
+        var tipNode = document.querySelector('#tip-value');
+        tipNode.innerHTML = orderDetails.tip;
+    }
     // set quantity for each line item
     var quantityById = {};
     orderDetails.lineItems.forEach(
@@ -218,7 +223,12 @@ function buildCartOrderDetails(orderDetails) {
         }
     );
     for (var lineItemInventoryItemId in quantityById) {
-        var lineItemQuantityNode = document.querySelector('#' + lineItemInventoryItemId);
+        // need to prefix with `#item-` because of how querySelector works
+        // doesn't allow dom elements that start with a number
+        var lineItemQuantityNode = document.querySelector('#item-' + lineItemInventoryItemId);
+        if (!lineItemQuantityNode) {
+            continue;
+        }
         lineItemQuantityNode.innerHTML = quantityById[lineItemInventoryItemId];
     }
 }
