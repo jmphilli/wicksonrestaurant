@@ -226,6 +226,8 @@ function buildCartOrderDetails(orderDetails) {
     if(orderDetails.tip != '$0.00') {
         var tipNode = document.querySelector('#tip-value');
         tipNode.innerHTML = orderDetails.tip;
+        var tipAddButton = document.querySelector('#add-tip-button');
+        tipAddButton.innerHTML = "Update tip";
     }
     // set quantity for each line item
     var quantityById = {};
@@ -265,20 +267,25 @@ function removeFromCart(inventoryId) {
     });
 }
 
-function addTip(pct, isPercentage) {
+function setTipCustomAmount(pct) {
+    var customAmount = document.querySelector('#custom-tip');
+    var totalNode = document.querySelector('#total');
+    var totalMajor = parseFloat(totalNode.innerText.substr(1));
+    var tipValue = pct * totalMajor;
+    customAmount.value = tipValue.toFixed(2);
+}
+
+function addTip() {
     var orderId = getOrderId();
-    var tip_amount = 0;
-    if (!isPercentage) {
-        var customAmount = document.querySelector('#custom-tip');
-        tip_amount = parseInt(parseFloat(customAmount.value, 0) * 100);
-    }
+    var customAmount = document.querySelector('#custom-tip');
+    var tip_amount = parseInt(parseFloat(customAmount.value, 0) * 100);
     return fetch(siteUrl + '/add-tip', {
             headers: {"Content-Type": "application/json; charset=utf-8"},
             method: 'POST',
             body: JSON.stringify({
                 order_id: orderId,
                 tip_amount: tip_amount,
-                percentage: pct,
+                percentage: 0,
             })
         })
         .then(_ => getOrderDetails(order_id).then(orderDetails => buildCartOrderDetails(orderDetails)));

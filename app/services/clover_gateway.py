@@ -50,16 +50,11 @@ class CloverService:
         )
 
     def add_tip(
-        self,
-        order_id: str,
-        tip_amount: int,
-        tip_percentage: int,
-        existing_line_item_id: Optional[str],
+        self, order_id: str, tip_amount: int, existing_line_item_id: Optional[str],
     ) -> None:
         body = {
             "price": tip_amount,
             "name": "tip",
-            "alternateName": f"{tip_percentage}",
         }
         if existing_line_item_id:
             # update_line_item_by_id doesn't work on clover's side

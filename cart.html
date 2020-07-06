@@ -50,12 +50,12 @@
 
 		<h3>Tip</h3>
 		<div id="tip-value"></div>
-		<button onclick="addTip(15, true);">15%</button>
-		<button onclick="addTip(20, true);">20%</button>
-		<button onclick="addTip(25, true);">25%</button>
+		<button onclick="setTipCustomAmount(.15);">15%</button>
+		<button onclick="setTipCustomAmount(.20);">20%</button>
+		<button onclick="setTipCustomAmount(.25);">25%</button>
 		<br/>
 		$<input id="custom-tip" type="number" min="0.01" step="0.01"/>
-		<button onclick="addTip(0, false);">Custom Amount</button>
+		<button onclick="addTip();" id="add-tip-button">Add tip</button>
 		<h3>Total (tax included)</h3>
 		<div id="total"></div>
 

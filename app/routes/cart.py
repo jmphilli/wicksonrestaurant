@@ -50,11 +50,10 @@ def add_tip() -> Tuple[str, int]:
     parsed_data = get_json()
     order_id = cast(str, parsed_data.get("order_id"))
     tip_amount = cast(int, parsed_data.get("tip_amount"))
-    tip_percentage = cast(int, parsed_data.get("percentage"))
 
     # todo remove existing tip line item if exists
     default_order_core_service().add_tip(
-        order_id=order_id, tip_amount=tip_amount, tip_percentage=tip_percentage,
+        order_id=order_id, tip_amount=tip_amount,
     )
 
     return json.dumps({"order_id": order_id}), HTTP_200_OK
