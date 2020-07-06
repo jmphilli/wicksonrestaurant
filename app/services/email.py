@@ -79,6 +79,18 @@ class EmailService:
         {tax_str}
         <h2> Total </h2>
         {total_str}
+
+        <h2>Wickson Restaurant</h2>
+        <p class="footer-text">
+            <a href="tel:707-895-2955">
+                707-895-2955
+            </a>
+        </p>
+        <p class="footer-text">
+            <a href="https://www.google.com/maps/place/9000+CA-128,+Philo,+CA+95466/@39.0595109,-123.437016,17z">
+                9000 Highway 128, Philo, CA. 95466
+            </a>
+        </p>
         </body>
         </html>
         """.format(
