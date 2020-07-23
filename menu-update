@@ -1,0 +1,2 @@
+#! /bin/bash
+scp -i ~/wickson/id_rsa -r ${WICKSON_SRC_DIR}/menu.html ${REMOTE_USER}@${REMOTE_HOST}:/var/www/wicksonrestaurant.com/menu.html
