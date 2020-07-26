@@ -45,10 +45,7 @@
 				Available To-Go only through our Orders page. 
 				Friday-Monday
 			</p>
-			
 			</h1>
-			
-				
 			<p>
 				Olives and Potato Chips
 			</p>
@@ -86,7 +83,10 @@
 			<br/>
 			<h1>
 				Sample Dinner Menu
-				Thursday-Sunday; Locals night Monday
+				<p>
+				Thursday-Monday;
+				"Locals night" Monday
+			</p>
 			</h1>
 			<p>
 				Housemade potato chips and smoked onion dip
