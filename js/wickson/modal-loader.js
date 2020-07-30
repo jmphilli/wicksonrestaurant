@@ -6,10 +6,10 @@ function loadMainPageModal() {
         return;
     }
     var elementId = '#close-covid-modal';
-    var span = document.querySelector(elementId)[0];
+    var span = document.querySelector(elementId);
     if (span != null && span !== undefined) {
         span.onclick = function () {
-            escapeHandler(elementId)
+            escapeHandler('#covid-modal')
         };
     }
 }
@@ -23,10 +23,10 @@ function loadOrderModalHandler() {
         };
     }
     var elementId = "#close-order-modal";
-    var span = document.querySelector(elementId)[0];
+    var span = document.querySelector(elementId);
     if (span != null && span !== undefined) {
         span.onclick = function () {
-            escapeHandler(elementId)
+            escapeHandler('#order-modal')
         };
     }
 }
@@ -40,8 +40,8 @@ function escapeHandler(elementId) {
 
 $(document).keyup(function(e) {
     if(e.key === "Escape") {
-        escapeHandler('#close-covid-modal');
-        escapeHandler('#close-order-modal'); // lol oops gotta do both
+        escapeHandler('#covid-modal');
+        escapeHandler('#order-modal'); // lol oops gotta do both
     }
 });
 
