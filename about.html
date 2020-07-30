@@ -13,8 +13,6 @@
 	<link rel="stylesheet" href="css/font-awesome.min.css">
 	<link rel="stylesheet" href="css/bootstrap.css">
 	<link rel="stylesheet" href="css/main.css">
-    <!-- stripe -->
-    <script src="https://js.stripe.com/v3/"></script>
 </head>
 
 <body>
@@ -28,7 +26,7 @@
 						<a href="index.html">home</a>
 						<a href="about.html" class="active">about</a>
 						<a href="menu.html">menu</a>
-						<a href="https://www.clover.com/online-ordering/wickson-philo">order</a>
+						<a id="order-link">order</a>
 						<a href="hours.html">hours</a>
 						<a href="contact.html">contact</a>
 					</div>
@@ -43,9 +41,6 @@
 				<br/>
 				<br/>
 				<br/>
-				<p class="m-0 col-lg-6 col-sm-6"></p>
-				<p class="m-0 col-lg-6 col-sm-6"></p>
-				<!-- float left -->
 				<p class="m-0 col-lg-6 col-sm-6 about-top">
 					Wickson is a neighborhood, wood-fired restaurant open for for lunch and dinner within Anderson Valley’s <a href="http://www.themadrones.com/" target="_blank">The Madrones</a>.
 				</p>
@@ -74,6 +69,67 @@
 				<br/>
 			</div>
 		</div>
+		<div id="order-modal" class="modal">
+    <div class="modal-content2">
+        <div class="modal-main-content">
+            <span class="close" id="close-order-modal">&times;</span>
+            <div class="modal-justin-contents">
+                <br/>
+                <br/>
+                <p class="row">
+                        <br/>
+                        <br/>
+
+                <p class="m-0 col-lg-12 col-sm-6">
+                    Please order <a href="https://www.clover.com/online-ordering/wickson-philo">HERE</a>
+                </p>
+
+            <br/>
+            <br/>
+
+                    <p class="m-0 col-lg-12 col-sm-6">
+                    Lunch
+                </p>
+            <p class="m-0 col-lg-12 col-sm-6">
+                    Friday-Monday
+            </p>
+                <p class="m-0 col-lg-12 col-sm-6">
+                    Order from 11:30am – 3pm
+                </p>
+                <br/>
+                <p class="m-0 col-lg-12 col-sm-6">
+                    Dinner
+                </p>
+                <p class="m-0 col-lg-12 col-sm-6">
+                    Tuesday-Monday
+                </p>
+                <p class="m-0 col-lg-12 col-sm-6">
+                    Order from 4:30 - 7:30pm
+                </p>
+                <br/>
+                <p class="m-0 col-lg-12 col-sm-6">
+                    Online orders take precedence to walk-in orders!
+                </p>
+                <br/>
+                <p class="m-0 col-lg-12 col-sm-6">
+                    We highly encourage you to tip and support our staff who are working extra hard during this time to
+                    provide
+                    excellent service.
+                </p>
+                <p class="m-0 col-lg-12 col-sm-6">
+                    For large orders, please email <a
+                        href="mailto:wicksonrestaurant@gmail.com">wicksonrestaurant@gmail.com</a> at
+                    least one day before; please leave your name and phone number.
+                </p>
+                <p class="m-0 col-lg-12 col-sm-6">
+                    For all other dinner inquiries please call The Madrones front desk at <a href="tel:707-895-2955">(707)
+                    895-2955</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
 	</div>
 
 	<!--================ Start Footer Area =================-->
@@ -119,6 +175,7 @@
 	<script src="js/jquery.ajaxchimp.min.js"></script>
 	<script src="js/jquery.magnific-popup.min.js"></script>
 	<script src="js/main.js"></script>
+	<script src="js/wickson/modal-loader.js"></script>
 </body>
 
 </html>
