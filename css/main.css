@@ -3114,6 +3114,30 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: bold;
 }
 
+@media (max-width: 751px) {
+  .modal-justin-contents {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 751px) {
+  .modal-justin-contents-small {
+    font-size: 10px;
+  }
+}
+
+
+.margin-above {
+    margin-top: 10px;
+  }
+
+
+@media (max-width: 751px) {
+  .margin-above {
+    margin-top: 5px;
+  }
+}
+
 .about-page {
   text-align: center;
   margin-left: auto;
