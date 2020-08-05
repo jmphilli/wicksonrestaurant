@@ -45,6 +45,10 @@ $(document).keyup(function(e) {
     if(e.key === "Escape") {
         escapeHandler('#covid-modal');
         escapeHandler('#order-modal'); // lol oops gotta do both
+        var body = document.querySelector('#body');
+        if (body != null && body !== undefined) {
+            body.style.overflow = 'scroll';
+        }
     }
 });
 
