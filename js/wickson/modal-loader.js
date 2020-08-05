@@ -5,11 +5,14 @@ function loadMainPageModal() {
     } else {
         return;
     }
+    var body = document.querySelector('#body');
+    body.style.overflow = 'hidden';
     var elementId = '#close-covid-modal';
     var span = document.querySelector(elementId);
     if (span != null && span !== undefined) {
         span.onclick = function () {
-            escapeHandler('#covid-modal')
+            escapeHandler('#covid-modal');
+            body.style.overflow = 'scroll';
         };
     }
 }
@@ -26,7 +29,7 @@ function loadOrderModalHandler() {
     var span = document.querySelector(elementId);
     if (span != null && span !== undefined) {
         span.onclick = function () {
-            escapeHandler('#order-modal')
+            escapeHandler('#order-modal');
         };
     }
 }
