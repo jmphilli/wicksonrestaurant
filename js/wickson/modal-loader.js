@@ -7,10 +7,18 @@ function loadMainPageModal() {
     }
     var body = document.querySelector('#body');
     body.style.overflow = 'hidden';
-    var elementId = '#close-covid-modal';
-    var span = document.querySelector(elementId);
-    if (span != null && span !== undefined) {
-        span.onclick = function () {
+    // close regardless of what the user clicks
+    var closeCovidModal = '#close-covid-modal';
+    var modal = '#covid-modal';
+    var span = document.querySelector(closeCovidModal);
+    var modalContent = document.querySelector(modal);
+    modalCloser(span);
+    modalCloser(modalContent);
+}
+
+function modalCloser(element) {
+    if (element != null && element !== undefined) {
+        element.onclick = function () {
             escapeHandler('#covid-modal');
             body.style.overflow = 'scroll';
         };
